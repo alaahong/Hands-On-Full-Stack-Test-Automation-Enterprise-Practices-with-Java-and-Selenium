@@ -7,8 +7,6 @@ import org.openqa.selenium.InvalidArgumentException;
 
 /**
  * @Author: Ian
- * @Date: 2024/7/22 22:49
- * @Description:
  */
 public class Example02Test extends ChromeBase {
   /**

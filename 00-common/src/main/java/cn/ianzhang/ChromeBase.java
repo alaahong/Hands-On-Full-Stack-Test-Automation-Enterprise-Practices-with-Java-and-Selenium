@@ -11,8 +11,6 @@ import java.util.Collections;
 
 /**
  * @Author: Ian
- * @Date: 2024/7/22 22:53
- * @Description:
  */
 public class ChromeBase {
   protected WebDriver driver;
