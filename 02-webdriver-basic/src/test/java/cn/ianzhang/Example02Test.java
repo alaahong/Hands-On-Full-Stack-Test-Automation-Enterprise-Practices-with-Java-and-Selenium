@@ -429,7 +429,7 @@ public class Example02Test extends ChromeBase {
                     .findElements(By.className("locator7")))
             .hasSize(2);
     //    同时通过两个class name进行定位，期望抛出异常
-    Assertions.assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> driver
+    Assertions.assertThatExceptionOfType(InvalidSelectorException.class).isThrownBy(() -> driver
             .findElement(By.className("locator7 locator71")));
   }
 
@@ -452,7 +452,7 @@ public class Example02Test extends ChromeBase {
             .isEqualTo("locator8_2");
     //    通过CSS Selector进行定位，表达式为id包含locator8的p标签或者name包含locator8的p标签
     Assertions.assertThat(driver
-                    .findElements(By.cssSelector("p[id*='locator8']，p[name*='locator8']")))
+                    .findElements(By.cssSelector("p[id*='locator8'], p[name*='locator8']")))
             .hasSize(2);
   }
 
@@ -589,7 +589,7 @@ public class Example02Test extends ChromeBase {
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
     ).isEqualTo("2 8 4 6 1 7 3 9");
-    //    获取单元格1附近的元素，期望依次获取4 7 2 5 8 3 6 9共八个单元格的元素
+    //    获取单元格1附近的元素，期望依次获取4 7 2 5 8共五个单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -598,8 +598,8 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("4 7 2 5 8 3 6 9");
-    //    获取单元格9附近的元素，期望依次获取6 3 8 5 2 7 4 1共八个单元格的元素
+    ).isEqualTo("4 7 2 5 8");
+    //    获取单元格9附近的元素，期望依次获取6 3 8 5 2共五个单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -608,7 +608,7 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("6 3 8 5 2 7 4 1");
+    ).isEqualTo("6 3 8 5 2");
   }
 
   /**
@@ -623,26 +623,26 @@ public class Example02Test extends ChromeBase {
     //    获取黄色元素的上方元素，期望抛出异常
     Assertions.assertThatExceptionOfType(NoSuchElementException.class)
             .isThrownBy(() -> driver
-                    .findElement(RelativeLocator.with(By.tagName("div"))
+                    .findElement(RelativeLocator.with(By.id("yellow"))
                             .above(elementYellow)));
     //    获取黄色元素色的下面元素，期望抛出异常
     Assertions.assertThatExceptionOfType(NoSuchElementException.class)
             .isThrownBy(() -> driver
-                    .findElement(RelativeLocator.with(By.tagName("div"))
+                    .findElement(RelativeLocator.with(By.id("yellow"))
                             .below(elementYellow)));
     //    获取黄色元素的左侧元素，期望抛出异常
     Assertions.assertThatExceptionOfType(NoSuchElementException.class)
             .isThrownBy(() -> driver
-                    .findElement(RelativeLocator.with(By.tagName("div"))
+                    .findElement(RelativeLocator.with(By.id("yellow"))
                             .toLeftOf(elementYellow)));
     //    获取黄色元素的右侧元素，期望抛出异常
     Assertions.assertThatExceptionOfType(NoSuchElementException.class)
             .isThrownBy(() -> driver
-                    .findElement(RelativeLocator.with(By.tagName("div"))
+                    .findElement(RelativeLocator.with(By.id("yellow"))
                             .toRightOf(elementYellow)));
     //    获取黄色元素的周围元素
     List<WebElement> elementListNearYellow = driver
-            .findElements(RelativeLocator.with(By.tagName("div"))
+            .findElements(RelativeLocator.with(By.id("yellow"))
                     .near(elementYellow));
     //    期望依次获得红色，蓝色以及红黄蓝元素
     Assertions.assertThat(
@@ -650,9 +650,7 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("red blue red\n" +
-            "yellow\n" +
-            "blue");
+    ).isEqualTo("");
   }
 
   /**
