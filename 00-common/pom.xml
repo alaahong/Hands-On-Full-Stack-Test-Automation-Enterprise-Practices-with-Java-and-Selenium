@@ -8,7 +8,7 @@
         <artifactId>code-for-selenium-in-action</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
     <artifactId>00-common</artifactId>
     <packaging>jar</packaging>
 
