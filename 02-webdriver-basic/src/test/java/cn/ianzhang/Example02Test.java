@@ -3,7 +3,12 @@ package cn.ianzhang;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.Colors;
 import org.openqa.selenium.support.locators.RelativeLocator;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 
 import java.util.List;
 import java.util.Objects;
@@ -1074,5 +1079,570 @@ public class Example02Test extends ChromeBase {
                             ))
             .isEqualTo("default value");
   }
+
+  /**
+   * 例程2.43  获取元素属性
+   */
+  @Test
+  public void getDomPropertyTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //        不存在名为readonly的DomProperty，对应的名为readOnly
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-1"))
+                            .getDomProperty("readonly"))
+            .isEqualTo(null);
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-1"))
+                            .getDomProperty("readOnly"))
+            .isEqualTo("true");
+    //        期望获取checked属性的值为"true"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-2"))
+                            .getDomProperty("checked"))
+            .isEqualTo("true");
+    //        期望获取required属性的值为"false"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-2"))
+                            .getDomProperty("required"))
+            .isEqualTo("false");
+    //        不存在名为class的DomProperty，对应的名为className
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-3"))
+                            .getDomProperty("class"))
+            .isEqualTo(null);
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-3"))
+                            .getDomProperty("className"))
+            .isEqualTo("test dom property");
+    //        期望获取value以及defaultValue属性的值皆为"default value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-4"))
+                            .getDomProperty("value"))
+            .isEqualTo("default value");
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-4"))
+                            .getDomProperty("defaultValue"))
+            .isEqualTo("default value");
+    //    模拟用户清除该元素的值并输入"post value"
+    driver.findElement(By.id("get-dom-property-4")).clear();
+    driver.findElement(By.id("get-dom-property-4")).sendKeys("post value");
+    //        此时期望获取value为"post value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-4"))
+                            .getDomProperty("value"))
+            .isEqualTo("post value");
+    //        此时期望获取defaultValue属性的值仍为"default value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-4"))
+                            .getDomProperty("defaultValue"))
+            .isEqualTo("default value");
+    //        期望获取href属性的值为解析网址后的值
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-property-5"))
+                            .getDomProperty("href"))
+            .isEqualTo("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html#");
+    //    期望getDomProperty获取的值等同于执行JavaScript对象.同名属性
+    Assertions.assertThat(
+                    ((JavascriptExecutor) driver)
+                            .executeScript(
+                                    "return document.querySelector('#get-dom-property-3').className"
+                            ))
+            .isEqualTo("test dom property");
+  }
+
+  /**
+   * 例程2.44  获取属性
+   */
+  @Test
+  public void getAttributeTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //        期望获取readonly属性的值为"true"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-1"))
+                            .getAttribute("readonly"))
+            .isEqualTo("true");
+    //        期望获取checked属性的值为"true"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-2"))
+                            .getAttribute("checked"))
+            .isEqualTo("true");
+    //        期望获取required属性的值为null
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-2"))
+                            .getAttribute("required"))
+            .isEqualTo(null);
+    //        期望获取class属性的值为"test attribute"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-3"))
+                            .getAttribute("class"))
+            .isEqualTo("test attribute");
+    //        期望获取value以及defaultValue属性的值皆为"default value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-4"))
+                            .getAttribute("value"))
+            .isEqualTo("default value");
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-4"))
+                            .getAttribute("defaultValue"))
+            .isEqualTo("default value");
+    //    模拟用户清除该元素的值并输入"post value"
+    driver.findElement(By.id("get-attribute-4")).clear();
+    driver.findElement(By.id("get-attribute-4")).sendKeys("post value");
+    //        此时期望获取value为"post value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-4"))
+                            .getAttribute("value"))
+            .isEqualTo("post value");
+    //        期望获取href属性的值为解析网址后的值
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-5"))
+                            .getAttribute("href"))
+            .isEqualTo("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html#");
+
+    //        此时期望获取defaultValue属性的值仍为"default value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-attribute-4"))
+                            .getAttribute("defaultValue"))
+            .isEqualTo("default value");
+  }
+
+  /**
+   * 例程2.45  元素是否可见
+   */
+  @Test
+  public void isDisplayedTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //        正常显示的元素执行isDisplayed期望返回true
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-displayed-1"))
+                            .isDisplayed())
+            .isTrue();
+    //        设置了hidden属性的元素执行isDisplayed期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-displayed-2"))
+                            .isDisplayed())
+            .isFalse();
+    //        设置了hidden属性父元素会导致子元素执行isDisplayed期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-displayed-3"))
+                            .isDisplayed())
+            .isFalse();
+    //        设置了"visibility: hidden"样式的元素执行isDisplayed期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-displayed-4"))
+                            .isDisplayed())
+            .isFalse();
+    //       设置了"display: none"样式的元素执行isDisplayed期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-displayed-5"))
+                            .isDisplayed())
+            .isFalse();
+  }
+
+  /**
+   * 例程2.46  元素是否启用
+   */
+  @Test
+  public void isEnabledTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //        正常的input执行isEnabled期望返回true
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-enabled-1"))
+                            .isEnabled())
+            .isTrue();
+    //        设置disabled的input执行isEnabled期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-enabled-2"))
+                            .isEnabled())
+            .isFalse();
+    //        设置disabled的select执行isEnabled期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-enabled-3"))
+                            .isEnabled())
+            .isFalse();
+    //        设置disabled的textarea执行isEnabled期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-enabled-4"))
+                            .isEnabled())
+            .isFalse();
+    //        因为p标签不可编辑，即使强行设置disabled，该p元素执行isEnabled期望返回true
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-enabled-5"))
+                            .isEnabled())
+            .isTrue();
+  }
+
+  /**
+   * 例程2.47  元素是否被选择
+   */
+  @Test
+  public void isSelectedTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //        期望未选中的checkbox返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-selected-1"))
+                            .isSelected())
+            .isFalse();
+    //        期望选中的checkbox返回true
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-selected-2"))
+                            .isSelected())
+            .isTrue();
+    //        针对有选项选中的Select元素进行判断，期望返回false
+    Assertions.assertThat(
+                    driver.findElement(By.id("is-selected-3"))
+                            .isSelected())
+            .isFalse();
+    //        期望未选中的option返回false
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.xpath("//select[@id='is-selected-3']/option[1]"))
+                            .isSelected())
+            .isFalse();
+    //        期望选中的option返回true
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.xpath("//select[@id='is-selected-3']/option[2]"))
+                            .isSelected())
+            .isTrue();
+    //        期望多选框中可以存在多个被选中的选项
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.xpath("//select[@id='is-selected-4']/option[2]"))
+                            .isSelected())
+            .isTrue();
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.xpath("//select[@id='is-selected-4']/option[3]"))
+                            .isSelected())
+            .isTrue();
+    //        期望未选中的radio返回false
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.id("is-selected-5"))
+                            .isSelected())
+            .isFalse();
+    //        期望选中的radio返回true
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.id("is-selected-6"))
+                            .isSelected())
+            .isTrue();
+    //        针对非checkbox、select中的option以及radio按钮以外的元素，
+    //        即使有强行设置checked，也会返回false
+    //    p标签不具备选中的状态，期望返回false
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.id("is-selected-7"))
+                            .isSelected())
+            .isFalse();
+    //    option不在select内，期望返回false
+    Assertions.assertThat(
+                    driver
+                            .findElement(By.id("is-selected-8"))
+                            .isSelected())
+            .isFalse();
+  }
+
+  /**
+   * 例程2.48  单选
+   */
+  @Test
+  public void operationSingleWithoutSelectTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/select.html");
+    //    获取目标元素
+    WebElement selectElement = driver.findElement(By.id("select-1"));
+    //    单选下拉列表，预期返回null
+    Assertions.assertThat(selectElement
+                    .getDomAttribute("multiple"))
+            .isNull();
+    //    获取选项option列表
+    List<WebElement> optionList = selectElement.findElements(By.tagName("option"));
+    //    打印每个option的value
+    //    value-select-1-1
+    //    value-select-1-2
+    //    value-select-1-3
+    optionList.forEach(element -> System.out.println(element.getDomAttribute("value")));
+    //    打印每个option的text
+    //    text-select-1-1
+    //    text-select-1-2
+    //    text-select-1-3
+    optionList.forEach(element -> System.out.println(element.getText()));
+    //    打印已选择的选项option的序号以及文本
+    //    option 1 is selected with text text-select-1-2
+    for (int i = 0; i < optionList.size(); i++) {
+      if (optionList.get(i).isSelected()) {
+        System.out.println(
+                "option "
+                        + i
+                        + " is selected with text "
+                        + optionList.get(i).getText()
+        );
+      }
+    }
+    //选中最后一个选项option
+    optionList.get(optionList.size() - 1).click();
+    //因为是单选下拉列表，所以期望点击后，最后一个选项被选，之前的倒数第二个选项不再被选
+    Assertions.assertThat(optionList.get(optionList.size() - 1)
+                    .isSelected())
+            .isTrue();
+    Assertions.assertThat(optionList.get(optionList.size() - 2)
+                    .isSelected())
+            .isFalse();
+  }
+
+
+  /**
+   * 例程2.49  多选
+   */
+  @Test
+  public void operationMultipleWithoutSelectTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/select.html");
+    //    获取目标元素
+    WebElement selectElement = driver.findElement(By.id("select-2"));
+    //     多选下拉列表，预期返回"true"
+    Assertions.assertThat(selectElement
+                    .getDomAttribute("multiple"))
+            .isEqualTo("true");
+    //    获取选项option列表
+    List<WebElement> optionList = selectElement.findElements(By.tagName("option"));
+    //    打印每个option的value
+    //    value-select-2-1
+    //    value-select-2-2
+    //    value-select-2-3
+    optionList.forEach(element -> System.out.println(element.getDomAttribute("value")));
+    //    打印每个option的text
+    //    text-select-2-1
+    //    text-select-2-2
+    //    text-select-2-3
+    optionList.forEach(element -> System.out.println(element.getText()));
+    //    打印已选择的选项option的序号以及文本
+    //    option 1 is selected with text text-select-2-1
+    for (int i = 0; i < optionList.size(); i++) {
+      if (optionList.get(i).isSelected()) {
+        System.out.println(
+                "option "
+                        + i
+                        + " is selected with text "
+                        + optionList.get(i).getText()
+        );
+      }
+    }
+    //选中最后一个选项option
+    optionList.get(optionList.size() - 1).click();
+    //因为是多选下拉列表，所以期望点击后，最后一个选项被选，页面初始时已经被选中的选项保持不变
+    Assertions.assertThat(optionList.get(optionList.size() - 1)
+                    .isSelected())
+            .isTrue();
+    Assertions.assertThat(optionList.get(0)
+                    .isSelected())
+            .isTrue();
+    //同时选中全部选项，如果已经被选中，则不重复点击
+    Actions action = new Actions(driver);
+    action.keyDown(Keys.CONTROL).perform();
+    optionList.stream().filter(element -> !element.isSelected()).forEach(WebElement::click);
+    action.keyUp(Keys.CONTROL).perform();
+    //预期全部选项option都被选中
+    Assertions.assertThat(optionList).allMatch(WebElement::isSelected);
+  }
+
+  /**
+   * 例程2.50  借助Selenium单选
+   */
+  @Test
+  public void operationSingleWithSelectTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/select.html");
+    //    获取目标元素
+    WebElement selectElement = driver.findElement(By.id("select-1"));
+    //    转换为select元素
+    Select select = new Select(selectElement);
+    //    期望单选下拉列表返回false
+    Assertions.assertThat(select.isMultiple())
+            .isFalse();
+    //    获取选项option列表
+    List<WebElement> elementList = select.getOptions();
+    //    期望通过getOptions方法获取的列表等同于通过标签或取得值
+    Assertions.assertThat(elementList)
+            .isEqualTo(selectElement.findElements(By.tagName("option")));
+    //    获取第一个被选中的选项option
+    Assertions.assertThat(select.getFirstSelectedOption())
+            .isEqualTo(elementList
+                    .stream()
+                    .filter(WebElement::isSelected)
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("No options are selected")));
+    //    获取全部被选中的选项option
+    Assertions.assertThat(select.getAllSelectedOptions())
+            .isEqualTo(elementList
+                    .stream()
+                    .filter(WebElement::isSelected)
+                    .collect(Collectors.toList()));
+    //    按照序号选中选项option
+    select.selectByIndex(0);
+    Assertions.assertThat(elementList
+                    .get(0)
+                    .isSelected())
+            .isTrue();
+    //    按照可见文本值选中选项option
+    select.selectByVisibleText("text-select-1-2");
+    Assertions.assertThat(elementList
+                    .get(1)
+                    .isSelected())
+            .isTrue();
+    //    按照value选中选项option
+    select.selectByValue("value-select-1-3");
+    Assertions.assertThat(elementList
+                    .get(2)
+                    .isSelected())
+            .isTrue();
+    //    反选选项的各种方法均不支持单选下拉列表的使用
+    Assertions.assertThatExceptionOfType(UnsupportedOperationException.class)
+            .isThrownBy(select::deselectAll);
+    Assertions.assertThatExceptionOfType(UnsupportedOperationException.class)
+            .isThrownBy(() -> select.deselectByVisibleText("VisibleText"));
+    Assertions.assertThatExceptionOfType(UnsupportedOperationException.class)
+            .isThrownBy(() -> select.deselectByIndex(0));
+    Assertions.assertThatExceptionOfType(UnsupportedOperationException.class)
+            .isThrownBy(() -> select.deselectByValue("Value"));
+    //    期望返回初始构建的WebElement元素
+    Assertions.assertThat(select.getWrappedElement())
+            .isEqualTo(selectElement);
+  }
+
+  /**
+   * 例程2.51  借助Selenium多选
+   */
+  @Test
+  public void operationMultipleWithSelectTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/select.html");
+    //    获取目标元素
+    WebElement selectElement = driver.findElement(By.id("select-2"));
+    //    转换为select元素
+    Select select = new Select(selectElement);
+    //    期望多选下拉列表返回true
+    Assertions.assertThat(select.isMultiple())
+            .isTrue();
+    //    获取选项option列表
+    List<WebElement> elementList = select.getOptions();
+    //    期望通过getOptions方法获取的列表等同于通过标签或取得值
+    Assertions.assertThat(elementList)
+            .isEqualTo(selectElement.findElements(By.tagName("option")));
+    //    取消全部选中的选项option
+    select.deselectAll();
+    //     没有选中的选项option，期望getAllSelectedOptions返回空列表
+    Assertions.assertThat(select.getAllSelectedOptions())
+            .isEmpty();
+    //    按照序号选中选项option
+    select.selectByIndex(0);
+    Assertions.assertThat(elementList
+                    .get(0)
+                    .isSelected())
+            .isTrue();
+    //    按照序号取消选中选项option
+    select.deselectByIndex(0);
+    //    按照可见文本值选中选项option
+    select.selectByVisibleText("text-select-2-2");
+    Assertions.assertThat(elementList
+                    .get(1)
+                    .isSelected())
+            .isTrue();
+    //    按照可见文本值取消选中选项option
+    select.deselectByVisibleText("text-select-2-2");
+    //    按照value选中选项option
+    select.selectByValue("value-select-2-3");
+    Assertions.assertThat(elementList
+                    .get(2)
+                    .isSelected())
+            .isTrue();
+    //    按照value取消选中选项option
+    select.deselectByValue("value-select-2-3");
+    //    没有选中的选项option，期望getFirstSelectedOption方法报错
+    Assertions.assertThatExceptionOfType(NoSuchElementException.class)
+            .isThrownBy(select::getFirstSelectedOption);
+    //    期望选中全部选项
+    select.getOptions()
+            .stream()
+            .filter(option -> !option.isSelected())
+            .forEach(WebElement::click);
+    Assertions.assertThat(select.getAllSelectedOptions())
+            .isEqualTo(select.getOptions());
+    //    期望返回初始构建的WebElement元素
+    Assertions.assertThat(select.getWrappedElement())
+            .isEqualTo(selectElement);
+  }
+
+  /**
+   * 例程2.52  操作非select元素抛出异常
+   */
+  @Test
+  public void nonSelectTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/select.html");
+    //    获取目标元素
+    WebElement selectElement = driver.findElement(By.id("select-3"));
+    //    对于非select元素，期望初始化时抛出异常
+    Assertions.assertThatExceptionOfType(UnexpectedTagNameException.class)
+            .isThrownBy(() -> new Select(selectElement));
+  }
+
+  /**
+   * 例程2.53  操作Color
+   */
+  @Test
+  public void colorTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/color.html");
+    //  通过CssValue获取元素的背景色
+    String rgba = driver.findElement(By.xpath("//td[normalize-space()='#FF0000']/preceding-sibling::td[4]"))
+            .getCssValue("background-color");
+    //    期望红色的背景色为"rgba(255, 0, 0, 1)", 注意,某些浏览器下可能获取的值为"rgb(255, 0, 0)"
+    Assertions.assertThat(rgba).isEqualTo("rgba(255, 0, 0, 1)");
+    //    通过颜色的构造方法获取Color对象
+    Color red = Color.fromString(rgba);
+    //    期望获取十六进制的颜色值
+    Assertions.assertThat(red.asHex())
+            .isEqualTo("#ff0000");
+    //    期望获取RGB的颜色值
+    Assertions.assertThat(red.asRgb())
+            .isEqualTo("rgb(255, 0, 0)");
+    //    期望获取RGBA的颜色值
+    Assertions.assertThat(red.asRgba())
+            .isEqualTo("rgba(255, 0, 0, 1)");
+    //    通过数值构造颜色
+    Assertions.assertThat(new Color(255, 0, 0, 1))
+            .isEqualTo(red);
+    //    通过名称构造颜色
+    Assertions.assertThat(Color.fromString("red"))
+            .isEqualTo(red);
+    //    通过HSL构造颜色
+    Assertions.assertThat(Color.fromString("hsl(0, 100%, 50%)"))
+            .isEqualTo(red);
+    //    通过HSLA构造颜色
+    Assertions.assertThat(Color.fromString("hsla(0, 100%, 50%, 1)"))
+            .isEqualTo(red);
+    //获取awt的颜色类
+    Assertions.assertThat(red.getColor())
+            .isInstanceOf(java.awt.Color.class);
+    //    可以通过Colors类获取颜色的枚举值
+    Assertions.assertThat(red)
+            .isEqualTo(Colors.RED.getColorValue());
+    //    如果颜色转换过程中缺失了透明度,则可能导致断言有误
+    Assertions.assertThat(Color.fromString(
+                    Colors.TRANSPARENT.getColorValue().asHex()))
+            .isEqualTo(Colors.BLACK.getColorValue());
+    Assertions.assertThat(Color.fromString(
+                    Colors.TRANSPARENT.getColorValue().asRgba()))
+            .isEqualTo(Colors.TRANSPARENT.getColorValue());
+  }
+
 
 }
