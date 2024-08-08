@@ -859,4 +859,220 @@ public class Example02Test extends ChromeBase {
             .isEqualTo("generic");
   }
 
+  /**
+   * 例程2.35  getSize
+   */
+  @Test
+  public void getSizeTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //    获取尺寸等信息
+    Dimension dimension = driver.findElement(By.id("get-size-1")).getSize();
+    //    打印该矩形的属性值
+    System.out.println("Width: " + dimension.getWidth());
+    System.out.println("Height: " + dimension.getHeight());
+  }
+
+  /**
+   * 例程2.36  getLocation
+   */
+  @Test
+  public void getLocationTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //    获取元素的位置，由相对于页面左上角的距离构成
+    Point point = driver.findElement(By.id("get-location-1")).getLocation();
+    //    打印距离
+    System.out.println("X: " + point.getX());
+    System.out.println("Y: " + point.getY());
+  }
+
+  /**
+   * 例程2.37  getRect
+   */
+  @Test
+  public void getRectTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //    获取元素的位置和尺寸等信息
+    Rectangle rectangle = driver.findElement(By.id("get-rect-1")).getRect();
+    //    打印该矩形的属性值
+    System.out.println("X: " + rectangle.getX());
+    System.out.println("Y: " + rectangle.getY());
+    System.out.println("Width: " + rectangle.getWidth());
+    System.out.println("Height: " + rectangle.getHeight());
+    //    元素的Rectangle可以视作是Size和Location的集合
+    Assertions.assertThat(driver.findElement(By.id("get-rect-1")).getSize())
+            .isEqualTo(rectangle.getDimension());
+    Assertions.assertThat(driver.findElement(By.id("get-rect-1")).getLocation())
+            .isEqualTo(rectangle.getPoint());
+  }
+
+
+  /**
+   * 例程2.38  getCssValue
+   */
+  @Test
+  public void getCssValueTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    // 设置当前窗口的宽高分别为1024和768
+    driver.manage().window().setSize(new Dimension(1024, 768));
+    //        依次获取当前目标元素的宽度和高度
+    String width1 = driver.findElement(By.id("get-css-value-1")).getCssValue("width");
+    String height1 = driver.findElement(By.id("get-css-value-1")).getCssValue("height");
+    //    设置当前窗口的宽高分别为640和480
+    driver.manage().window().setSize(new Dimension(640, 480));
+    //        再次获取当前目标元素的宽度和高度
+    String width2 = driver.findElement(By.id("get-css-value-1")).getCssValue("width");
+    String height2 = driver.findElement(By.id("get-css-value-1")).getCssValue("height");
+    //    预期当前元素的宽度的值width2小于width1，但是高度的值height1等于height2
+    Assertions.assertThat(width1).isGreaterThan(width2);
+    Assertions.assertThat(height1).isEqualTo(height2);
+    //    预期获取shorthand属性值时，返回值包括"Arial， sans-serif"，但是还包含其他内容
+    String shorthandValue = driver.findElement(By.id("get-css-value-1")).getCssValue("font");
+    Assertions.assertThat(shorthandValue).contains("Arial, sans-serif").isNotEqualTo("Arial， sans-serif");
+    //    预期获取longhand属性值时，返回实际的CSS值为"Arial， sans-serif"
+    String longhandValue = driver.findElement(By.id("get-css-value-1")).getCssValue("font-family");
+    Assertions.assertThat(longhandValue).isEqualTo("Arial, sans-serif");
+  }
+
+
+  /**
+   * 例程2.40  Selenium 4 中实现getShadowRoot
+   */
+  @Test
+  public void getShadowRootTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //    获取open状态的shadowDom
+    SearchContext searchContext = driver.findElement(By.id("get-shadow-root-1")).getShadowRoot();
+    //    通过SearchContext可以进行针对ShadowDom的二次搜索，因为ChromeDriver实现的缘故，此处尽量采用By.cssSelector进行定位
+    Assertions.assertThat(searchContext
+                    .findElement(By.cssSelector("#shadow-content-1"))
+                    .getText())
+            .isEqualTo("shadow-content-1");
+    //    Selenium无法获取closed的shadowDom
+    Assertions.assertThatExceptionOfType(NoSuchShadowRootException.class)
+            .isThrownBy(() -> driver
+                    .findElement(By.id("get-shadow-root-2"))
+                    .getShadowRoot()
+            );
+    //    如果想通过JavaScript进行获取的话，需要对返回结果进行SearchContext类型的强制转换
+    SearchContext jsSearchContext = ((SearchContext) ((JavascriptExecutor) driver).executeScript("return document.getElementById('get-shadow-root-1').shadowRoot"));
+    Assertions.assertThat(jsSearchContext
+                    .findElement(By.cssSelector("#shadow-content-1"))
+                    .getText())
+            .isEqualTo("shadow-content-1");
+  }
+
+  /**
+   * 例程2.41  获取文本
+   */
+  @Test
+  public void getTextTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //        期望获取第一个元素的text为"text1"
+    Assertions.assertThat(driver.findElement(By.id("get-text-1")).getText()).isEqualTo("text1");
+    //        期望获取第二个元素的text为"text2"，包括该元素内的所有元素的可见内容
+    Assertions.assertThat(driver.findElement(By.id("get-text-2")).getText()).isEqualTo("text2");
+    //        期望获取第三个元素的text为空""，该元素的value属性的值并不被视为text的内容
+    Assertions.assertThat(driver.findElement(By.id("get-text-3")).getText()).isEqualTo("");
+    //        期望获取第四个元素的text为空""，label的值并不会被视为该元素text的内容
+    Assertions.assertThat(driver.findElement(By.id("get-text-4")).getText()).isEqualTo("");
+    //        期望获取第五个元素的每个选项的值以及占位符号的合集
+    Assertions.assertThat(driver.findElement(By.id("get-text-5")).getText()).matches("(\\s*)(option1)(\\s*)(option2)(\\s*)");
+    //        Select是非闭合标签，若是源码强行闭合，浏览器可能会有特殊的渲染。例如Chrome97版本运行时会得到非空的值，但是Firefox96会得到空""
+    Assertions.assertThat(driver.findElement(By.id("get-text-6")).getText()).isNotEmpty();
+    //        无option的Select标签为无效标签，可能会被浏览器忽略。例如Chrome97版本运行时该标签不可见
+    Assertions.assertThatExceptionOfType(NoSuchElementException.class)
+            .isThrownBy(() -> driver.findElement(
+                    By.id("get-text-7"))
+            );
+    //        期望获取第八个元素的每个选项的值以及之间占位符号的合集，
+    //        与Select内的option标签不同的是，input为自闭合标签，所以文本值并不包含额外的非内容字段，
+    //        只是每个选项之间会自动保留换行或者增加空格用以区分内容
+    Assertions.assertThat(driver.findElement(By.id("get-text-8"))
+                    .getText())
+            .isEqualTo("radio1 radio2\nradio3\nradio4");
+    //    checkbox采用与上述radio相同的input标签，所以getText的逻辑一致
+    Assertions.assertThat(driver.findElement(By.id("get-text-9"))
+                    .getText())
+            .isEqualTo("checkbox1 checkbox2\ncheckbox3\ncheckbox4");
+    //    期望获取按钮的text为"button1"
+    Assertions.assertThat(driver.findElement(By.id("get-text-10"))
+                    .getText())
+            .isEqualTo("button1");
+    //    期望获取按钮的text为空""
+    Assertions.assertThat(driver.findElement(By.id("get-text-11"))
+                    .getText())
+            .isEqualTo("");
+  }
+
+
+  /**
+   * 例程2.42  获取元素特性
+   */
+  @Test
+  public void getDomAttributeTest() {
+    //        打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get_element_information.html");
+    //        期望获取readonly的DomAttribute值为"true"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-1"))
+                            .getDomAttribute("readonly"))
+            .isEqualTo("true");
+    //        期望获取checked的DomAttribute值为"true"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-2"))
+                            .getDomAttribute("checked"))
+            .isEqualTo("true");
+    //        期望获取required的DomAttribute值为null
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-2"))
+                            .getDomAttribute("required"))
+            .isEqualTo(null);
+    //        期望获取class的DomAttribute值为"test attribute"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-3"))
+                            .getDomAttribute("class"))
+            .isEqualTo("test dom attribute");
+    //        期望获取value的DomAttribute值为"default value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-4"))
+                            .getDomAttribute("value"))
+            .isEqualTo("default value");
+    //    期望获取defaultValue的DomAttribute值为null，因为不存在此属性
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-4"))
+                            .getDomAttribute("defaultValue"))
+            .isEqualTo(null);
+    //    模拟用户清除该元素的值并输入"post value"
+    driver.findElement(By.id("get-dom-attribute-4")).clear();
+    driver.findElement(By.id("get-dom-attribute-4")).sendKeys("post value");
+    //        此时期望获取value的DomAttribute值为"default value"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-4"))
+                            .getDomAttribute("value"))
+            .isEqualTo("default value");
+    //        期望获取自定义属性的值为"data-test-dom-attribute"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-5"))
+                            .getDomAttribute("data-test-dom-attribute"))
+            .isEqualTo("data-test-dom-attribute");
+    //        期望获取href属性的值为"#"
+    Assertions.assertThat(
+                    driver.findElement(By.id("get-dom-attribute-6"))
+                            .getDomAttribute("href"))
+            .isEqualTo("#");
+    //    期望getDomAttribute获取的值等同于执行JavaScript对象的getAttribute方法
+    Assertions.assertThat(
+                    ((JavascriptExecutor) driver)
+                            .executeScript(
+                                    "return document.querySelector('#get-dom-attribute-4').getAttribute('value')"
+                            ))
+            .isEqualTo("default value");
+  }
+
 }

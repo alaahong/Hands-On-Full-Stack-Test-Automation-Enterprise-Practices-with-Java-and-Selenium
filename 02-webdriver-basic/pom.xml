@@ -13,6 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <test-failure-ignore-flag>false</test-failure-ignore-flag>
     </properties>
 
     <dependencies>

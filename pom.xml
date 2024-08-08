@@ -11,6 +11,7 @@
         <module>00-common</module>
         <module>01-basic-knowledge</module>
         <module>02-webdriver-basic</module>
+        <module>07-legacy-selenium-3</module>
     </modules>
     <version>1.0-SNAPSHOT</version>
     <developers>
@@ -32,13 +33,14 @@
         <maven-surefire-report-plugin.version>3.0.0-M7</maven-surefire-report-plugin.version>
         <maven-jxr-plugin.version>3.2.0</maven-jxr-plugin.version>
         <maven-site-plugin.version>4.0.0-M1</maven-site-plugin.version>
+        <test-failure-ignore-flag>true</test-failure-ignore-flag>
         <!--        dependency version-->
         <junit.version>5.10.3</junit.version>
         <selenium.version>4.23.0</selenium.version>
         <assertj.version>3.26.3</assertj.version>
         <logback.version>1.5.6</logback.version>
         <shutterbug.version>1.6</shutterbug.version>
-        <webdrivermanager.version>5.9.1</webdrivermanager.version>
+        <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <awaitility.version>4.2.1</awaitility.version>
         <slf4j.version>2.0.13</slf4j.version>
         <lombok.version>1.18.34</lombok.version>
@@ -87,7 +89,7 @@
                         <include>**/*Tests.java</include>
                         <include>**/*TestCase.java</include>
                     </includes>
-                    <testFailureIgnore>true</testFailureIgnore>
+                    <testFailureIgnore>${test-failure-ignore-flag}</testFailureIgnore>
                     <argLine>
                         -Dfile.encoding=${project.build.sourceEncoding}
                         <!--                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"-->
