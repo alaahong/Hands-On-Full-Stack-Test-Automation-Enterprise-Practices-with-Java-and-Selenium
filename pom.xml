@@ -11,6 +11,7 @@
         <module>00-common</module>
         <module>01-basic-knowledge</module>
         <module>02-webdriver-basic</module>
+        <module>03-webdriver-advanced</module>
         <module>07-legacy-selenium-3</module>
     </modules>
     <version>1.0-SNAPSHOT</version>
@@ -36,14 +37,15 @@
         <test-failure-ignore-flag>true</test-failure-ignore-flag>
         <!--        dependency version-->
         <junit.version>5.10.3</junit.version>
-        <selenium.version>4.23.0</selenium.version>
+        <selenium.version>4.23.1</selenium.version>
         <assertj.version>3.26.3</assertj.version>
         <logback.version>1.5.6</logback.version>
         <shutterbug.version>1.6</shutterbug.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
-        <awaitility.version>4.2.1</awaitility.version>
-        <slf4j.version>2.0.13</slf4j.version>
+        <awaitility.version>4.2.2</awaitility.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <lombok.version>1.18.34</lombok.version>
+        <jackson.version>2.17.2</jackson.version>
     </properties>
 
     <build>
@@ -196,6 +198,31 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-reload4j</artifactId>
                 <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-toml</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-properties</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

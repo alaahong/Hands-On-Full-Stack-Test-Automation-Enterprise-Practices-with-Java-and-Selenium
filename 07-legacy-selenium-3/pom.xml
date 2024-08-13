@@ -10,6 +10,7 @@
     </parent>
     <version>${project.parent.version}</version>
     <artifactId>07-legacy-selenium-3</artifactId>
+    <name>07-legacy-selenium-3</name>
     <packaging>jar</packaging>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
