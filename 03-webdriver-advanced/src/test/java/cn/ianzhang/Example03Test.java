@@ -1,23 +1,34 @@
 package cn.ianzhang;
 
 
+import com.assertthat.selenium_shutterbug.core.Capture;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.util.Files;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.*;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.PointerInput;
+import org.openqa.selenium.print.PrintOptions;
+import org.openqa.selenium.support.ui.Sleeper;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -329,6 +340,7 @@ public class Example03Test extends ChromeBase {
     //    期望 windowSize3 小于 windowSize4
     //    Assertions.assertThat(windowSize3).isLessThan(windowSize4);
   }
+
   /**
    * 例程3.5  清除元素值
    */
@@ -371,6 +383,7 @@ public class Example03Test extends ChromeBase {
     Assertions.assertThat(element.getAttribute("value"))
             .isEmpty();
   }
+
   /**
    * 例程3.6  鼠标交互
    */
@@ -440,6 +453,7 @@ public class Example03Test extends ChromeBase {
             .isEqualTo("click")
             .isNotEqualTo("touchend");
   }
+
   private WebElement fetchLastP(WebElement clickEvent) {
     List<WebElement> list = clickEvent.findElements(By.tagName("p"));
     if (!list.isEmpty()) {
@@ -744,6 +758,345 @@ public class Example03Test extends ChromeBase {
     //    期望当前会话中pin的集合为空
     Assertions.assertThat(((JavascriptExecutor) driver).getPinnedScripts())
             .isEmpty();
+  }
+
+  /**
+   * 例程3.11  复杂JavaScript操作
+   */
+  @Test
+  public void caseTest() {
+    //    打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/javascript.html");
+    //    获取username元素
+    WebElement usernameElement = driver.findElement(By.id("username-input"));
+    //    获取reset按钮
+    WebElement resetElement = driver.findElement(By.id("reset-btn"));
+    //    获取第10个td元素
+    WebElement tdElement10 = driver.findElement(By.xpath("//div[@id='container']//table/tbody/tr[10]/td"));
+    //    当通过JavascriptExecutor执行 "对象.Property" 时,期望抛出异常
+    Assertions.assertThatExceptionOfType(JavascriptException.class)
+            .isThrownBy(() -> ((JavascriptExecutor) driver)
+                    .executeScript("arguments[0].arguments[1] = arguments[2]"
+                            , usernameElement
+                            , "value"
+                            , "username"));
+    //    通过 "对象['Property']" 操作时,期望没有异常
+    ((JavascriptExecutor) driver)
+            .executeScript("arguments[0][arguments[1]] = arguments[2]"
+                    , usernameElement
+                    , "value"
+                    , "username");
+    //    期望username元素的value值为 "username"
+    Assertions.assertThat(usernameElement.getDomProperty("value"))
+            .isEqualTo("username");
+    //    通过JavascriptExecutor设置attribute
+    ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].setAttribute(arguments[1],arguments[2])"
+                    , resetElement
+                    , "hidden"
+                    , "hidden");
+    //    因为元素hidden,期望点击时抛出异常
+    Assertions.assertThatExceptionOfType(ElementNotInteractableException.class)
+            .isThrownBy(() -> resetElement.click());
+    //    通过JavascriptExecutor去除Attribute
+    ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].removeAttribute(arguments[1])"
+                    , resetElement
+                    , "hidden");
+    //    期望元素可见
+    Assertions.assertThat(resetElement.isDisplayed())
+            .isTrue();
+    //    获取元素位置
+    Point pointStart = tdElement10.getLocation();
+    //    滚动到特定元素
+    ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].scrollIntoView()"
+                    , tdElement10);
+    //    获取元素位置
+    Point pointEnd = tdElement10.getLocation();
+    //    期望位置有变化
+    Assertions.assertThat(pointStart).isNotEqualTo(pointEnd);
+  }
+
+  /**
+   * 例程3.11  弹窗操作
+   */
+  @Test
+  public void alertTest() {
+    //    打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/interaction.html");
+    //    触发Alert
+    driver.findElement(By.id("alert-btn")).click();
+    //    通过driver.switchTo().alert()获取Alert对象alert
+    Alert alert = driver.switchTo().alert();
+    //    通过getText()方法获取弹窗的文本
+    Assertions.assertThat(alert.getText())
+            .isEqualTo("I am an alert");
+    //    通过accept()关闭弹窗,相当于点击弹窗的 OK 或者 确定 按钮
+    alert.accept();
+
+    //    触发confirm
+    driver.findElement(By.id("confirm-btn")).click();
+    //    获取Alert对象confirm
+    Alert confirm = driver.switchTo().alert();
+    //    通过getText()方法获取弹窗的文本
+    Assertions.assertThat(confirm.getText())
+            .isEqualTo("I am a confirm");
+    //    通过dismiss()关闭弹窗, 相当于点击弹窗的 Cancel 或者 取消 按钮
+    confirm.dismiss();
+    //    期望confirm执行dismiss()后获取到的结果是false
+    Assertions.assertThat(driver.findElement(By.id("confirm-result")).getText())
+            .isEqualTo("false");
+
+    //    触发prompt
+    driver.findElement(By.id("prompt-btn")).click();
+    //    获取Alert对象prompt
+    Alert prompt = driver.switchTo().alert();
+    //    通过getText()方法获取弹窗的文本
+    Assertions.assertThat(prompt.getText())
+            .isEqualTo("What's your name?");
+    //    为弹窗的文本框键入文本
+    prompt.sendKeys("ian");
+
+    //    通过accept()关闭弹窗,相当于点击弹窗的 OK 或者 确定 按钮
+    prompt.accept();
+    //    期望键入的文本为 "ian"
+    Assertions.assertThat(driver.findElement(By.id("prompt-result")).getText())
+            .isEqualTo("ian");
+
+    //    虽然上述代码获取了多个Alert对象,但是Selenium并不区分Alert对象,针对的都是当前弹窗进行操作
+    driver.findElement(By.id("confirm-btn")).click();
+    alert.accept();
+    Assertions.assertThat(driver.findElement(By.id("confirm-result")).getText())
+            .isEqualTo("true");
+
+    //    如果当前窗口没有有效弹窗,则会抛出异常
+    Assertions.assertThatExceptionOfType(NoAlertPresentException.class)
+            .isThrownBy(prompt::accept);
+    //    若使用默认的处理弹窗的行为none,则会有以下期望
+    //    driver.findElement(By.id("alert-btn")).click();
+    //    Assertions.assertThatExceptionOfType(UnhandledAlertException.class)
+    //            .isThrownBy(() -> driver.findElement(By.id("confirm-result")).getText());
+  }
+
+
+  /**
+   * 例程3.12  文件上传
+   */
+  @Test
+  public void fileUploadTest() {
+    //    打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/interaction.html");
+    List<String> tempFileList = new LinkedList<>();
+    for (int i = 0; i < 5; i++) {
+      tempFileList.add(Files.newTemporaryFile().getAbsolutePath());
+    }
+    WebElement singleUpload = driver.findElement(By.id("single-upload"));
+    WebElement multipleUpload = driver.findElement(By.id("multiple-upload"));
+    singleUpload.sendKeys(tempFileList.get(0));
+    List<Map<String, Object>> singleFileFirst =
+            (List<Map<String, Object>>) ((JavascriptExecutor) driver)
+                    .executeScript("return arguments[0]['files']", singleUpload);
+    singleUpload.sendKeys(tempFileList.get(1));
+    //    org.openqa.selenium.InvalidArgumentException: invalid argument:
+    //    the element can not hold multiple files
+    Assertions.assertThatExceptionOfType(InvalidArgumentException.class)
+            .isThrownBy(() -> singleUpload
+                    .sendKeys(tempFileList.get(3) + "\n"
+                            , tempFileList.get(4)));
+    List<Map<String, Object>> singleFileSecond =
+            (List<Map<String, Object>>) ((JavascriptExecutor) driver)
+                    .executeScript("return arguments[0]['files']", singleUpload);
+    Assertions.assertThat(singleFileSecond).hasSize(1).isNotEqualTo(singleFileFirst);
+    multipleUpload.sendKeys(tempFileList.get(2));
+    List<Map<String, Object>> multipleFilesFirst =
+            (List<Map<String, Object>>) ((JavascriptExecutor) driver)
+                    .executeScript("return arguments[0]['files']", multipleUpload);
+    Assertions.assertThat(multipleFilesFirst).hasSize(1);
+    Assertions.assertThatExceptionOfType(InvalidArgumentException.class)
+            .isThrownBy(() -> multipleUpload.sendKeys(tempFileList.get(3), tempFileList.get(4)));
+    multipleUpload.sendKeys(tempFileList.get(3) + "\n", tempFileList.get(4));
+    List<Map<String, Object>> multipleFilesSecond = (List<Map<String, Object>>) ((JavascriptExecutor) driver).executeScript("return arguments[0]['files']", multipleUpload);
+    Assertions.assertThat(multipleFilesSecond).hasSize(3);
+  }
+
+  /**
+   * 例程3.13  文件下载
+   */
+  @Test
+  public void fileTest() throws InterruptedException {
+    //    获取临时文件夹
+    File downloadFolder = Files.newTemporaryFolder();
+    //    定义配置表
+    HashMap<String, Object> prefs = new HashMap<>();
+    //    设置默认的下载目录
+    prefs.put("download.default_directory", downloadFolder.getAbsolutePath());
+    //    关闭下载选择提示框
+    prefs.put("download.prompt_for_download", false);
+    //    新建Chrome配置项
+    ChromeOptions chromeOptions = new ChromeOptions();
+    //    将配置表放入Chrome配置项
+    chromeOptions.setExperimentalOption("prefs", prefs);
+    //    新建ChromeDriver实例
+    WebDriver driver = null;
+    try {
+      driver = new ChromeDriver(chromeOptions);
+      //    打开目标页面
+      driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/interaction.html");
+      //    点击页面链接进行下载
+      driver.findElement(By.id("download-link-1")).click();
+      //    期望文件下载到了预制目录
+      String fileName1 = driver.findElement(By.id("download-link-1")).getAttribute("download");
+      File targetFile1 = new File(downloadFolder.getAbsolutePath() + File.separator + fileName1);
+      Sleeper.SYSTEM_SLEEPER.sleep(Duration.ofSeconds(5));
+      Assertions.assertThat(targetFile1.exists()).isTrue();
+      //    因为浏览器可以直接打开部分类型的文件,所以期望无文件下载
+      driver.findElement(By.id("download-link-2")).click();
+      String fileName2 = driver.findElement(By.id("download-link-2")).getAttribute("download");
+      File targetFile2 = new File(downloadFolder.getAbsolutePath() + File.separator + fileName2);
+      Assertions.assertThat(targetFile2.exists()).isFalse();
+      //    通过获取属性值的方式得到下载链接,并利用下载类库进行下载
+      String filePath2 = driver.findElement(By.id("download-link-2")).getAttribute("href");
+      NativeHttpConnectionUtil.downloadFile(filePath2, targetFile2.getAbsolutePath());
+      Assertions.assertThat(targetFile2.exists()).isTrue();
+    } finally {
+      if (driver != null)
+        driver.quit();
+    }
+  }
+
+
+  /**
+   * 例程3.15  Cookie操作
+   */
+  @Test
+  public void cookieTest() {
+    //    打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/interaction.html");
+    //    构造默认的Cookie过期时间
+    Date expire = Date.from(
+            LocalDateTime.now()
+                    .plusSeconds(10L)
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+    //    构造测试Cookie
+    Cookie cookie1 = new Cookie("cname1", "value1", null, expire);
+    Cookie cookie2 = new Cookie("cname2", "value2", null, expire);
+    Cookie cookie3 = new Cookie("cname3", "value3", null, expire);
+    Cookie cookie4 = new Cookie("cname4", "value4", null, expire);
+    //    添加Cookie
+    driver.manage().addCookie(cookie1);
+    driver.manage().addCookie(cookie2);
+    driver.manage().addCookie(cookie3);
+    driver.manage().addCookie(cookie4);
+    //    获取全部Cookie的集合
+    Set<Cookie> set = driver.manage().getCookies();
+    //    期望集合中包括上述四个Cookie
+    Assertions.assertThat(set)
+            .contains(cookie1, cookie2, cookie3, cookie4);
+    //    通过Name删除Cookie
+    driver.manage().deleteCookieNamed("cname1");
+    //    通过对象删除Cookie
+    driver.manage().deleteCookie(cookie2);
+    //    通过对象删除也是通过Name
+    driver.manage().deleteCookie(new Cookie("cname3", "test", "/", new Date()));
+    //    期望集合中不包括已删除的Cookie
+    Assertions.assertThat(driver.manage().getCookies())
+            .doesNotContain(cookie1, cookie2, cookie3);
+    //    通过Name获取Cookie
+    Cookie tempCookie = driver.manage().getCookieNamed("cname4");
+    Assertions.assertThat(tempCookie)
+            .isEqualTo(cookie4);
+    //    删除所有Cookie
+    driver.manage().deleteAllCookies();
+    //    期望Cookie被清空
+    Assertions.assertThat(driver.manage().getCookies())
+            .isEmpty();
+  }
+
+  /**
+   * 例程3.16  截图操作
+   */
+  @Test
+  public void screenshotTest() {
+    //    打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/interaction.html");
+    //    获取表格元素
+    WebElement tableElement = driver.findElement(By.id("table-div"));
+    //    获取待嵌入图片元素
+    WebElement embedElement = driver.findElement(By.id("embed-pic"));
+    //    获取截图文件
+    File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    //    期望截图位于系统临时目录,且后缀名为png
+    Assertions.assertThat(file.getAbsolutePath())
+            .startsWith(System.getProperty("java.io.tmpdir"))
+            .endsWith("png");
+    //    获取BASE64格式的元素截图
+    String picBase64 = tableElement.getScreenshotAs(OutputType.BASE64);
+    //    将截图内容追加到待嵌入图片元素
+    ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].src='data:image/png;base64," + picBase64 + "'"
+                    , embedElement);
+  }
+
+  /**
+   * 例程3.17  shutterbug截图操作
+   */
+  @Test
+  public void shutterbugTest() {
+    //    打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/screenshot.html");
+    WebElement nav = driver.findElement(By.id("nav"));
+    WebElement monthList = driver.findElement(By.id("month-list"));
+    WebElement todayBtn = driver.findElement(By.id("today-btn"));
+    WebElement searchBtn = driver.findElement(By.id("search-btn"));
+    WebElement searchBox = driver.findElement(By.id("text-field"));
+    Shutterbug.shootPage(driver, Capture.VIEWPORT)
+            .blur(searchBox)
+            .highlight(searchBtn)
+            .monochrome(nav)
+            .highlightWithText(monthList, Color.blue,
+                    3, "Monochromed", Color.blue,
+                    new Font("SansSerif", Font.BOLD, 20))
+            .highlightWithText(todayBtn, "Go back to today")
+            .withTitle("Calendar Sample - " + new Date())
+            .withName("screenshot")
+            .withThumbnail(0.7)
+            .save(Files.temporaryFolderPath());
+    Shutterbug.shootPage(driver, Capture.FULL_SCROLL)
+            .save(Files.temporaryFolderPath());
+  }
+
+  /**
+   * 例程3.18  页面保存为PDF
+   */
+  @Test
+  public void pdfTest() throws IOException {
+    if (driver instanceof
+            PrintsPage) {
+      //    打开目标页面
+      driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/screenshot.html");
+      Path printPage = Paths.get(Files.temporaryFolderPath() + "PrintPage.pdf");
+      Pdf print = ((PrintsPage) driver).print(new PrintOptions());
+      FileUtils.writeByteArrayToFile(printPage.toFile(), OutputType.BYTES.convertFromBase64Png(print.getContent()));
+      System.out.println(printPage.toAbsolutePath().toString());
+    } else {
+      System.out.println("This driver is not instance of printsPage");
+    }
+  }
+
+  /**
+   * 例程3.19  通过截图保存页面为PDF
+   */
+  @Test
+  public void openPdfTest() throws IOException {
+    //    打开目标页面
+    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/screenshot.html");
+    //    获取截图文件
+    File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    //    借助工具类生成截图PDF文件
+    PdfUtil.generatePdfFileWithPictures(Paths.get(Files.temporaryFolderPath() + "Screenshot.pdf").toFile()
+            , Map.of("Screenshot", file));
   }
 
 }
