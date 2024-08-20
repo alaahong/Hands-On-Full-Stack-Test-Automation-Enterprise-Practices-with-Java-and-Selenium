@@ -28,6 +28,10 @@ public class ChromeBase {
     options.addArguments("--disable-gpu");
     //关闭沙盒模式
     options.addArguments("–-no-sandbox");
+    //disable specifying the browser options
+    options.addArguments("--disable-search-engine-choice-screen");
+    //disable language download
+    options.addArguments("--disable-features=OptimizationGuideModelDownloading,OptimizationHintsFetching,OptimizationTargetPrediction,OptimizationHints");
     options.addArguments("--no-default-browser-check");
     options.addArguments("--start-maximized");
     options.addArguments("--lang=zh-CN");
@@ -37,6 +41,7 @@ public class ChromeBase {
     //        options.addArguments("--disable-dev-shm-usage");
     options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
     //    driver = new ChromeDriver(service, options);
+    options.enableBiDi();
     driver = new ChromeDriver(options);
   }
 

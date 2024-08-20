@@ -1098,5 +1098,4 @@ public class Example03Test extends ChromeBase {
     PdfUtil.generatePdfFileWithPictures(Paths.get(Files.temporaryFolderPath() + "Screenshot.pdf").toFile()
             , Map.of("Screenshot", file));
   }
-
 }
