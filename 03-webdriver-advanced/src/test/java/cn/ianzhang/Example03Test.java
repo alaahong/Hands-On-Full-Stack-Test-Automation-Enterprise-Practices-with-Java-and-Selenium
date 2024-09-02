@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
  */
 public class Example03Test extends ChromeBase {
 
-
   /**
    * 例程3.1  发送键位
    */

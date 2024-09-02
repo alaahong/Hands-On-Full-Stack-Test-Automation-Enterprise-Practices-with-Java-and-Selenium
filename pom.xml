@@ -37,7 +37,7 @@
         <test-failure-ignore-flag>true</test-failure-ignore-flag>
         <!--        dependency version-->
         <junit.version>5.10.3</junit.version>
-        <selenium.version>4.23.1</selenium.version>
+        <selenium.version>4.24.0</selenium.version>
         <assertj.version>3.26.3</assertj.version>
         <logback.version>1.5.6</logback.version>
         <shutterbug.version>1.6</shutterbug.version>

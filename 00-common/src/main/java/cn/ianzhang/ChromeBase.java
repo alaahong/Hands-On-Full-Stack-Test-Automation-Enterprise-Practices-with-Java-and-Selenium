@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chromium.ChromiumDriverLogLevel;
 
 import java.util.Collections;
 
@@ -17,10 +19,10 @@ public class ChromeBase {
 
   @BeforeEach
   void setupTest() {
-    //    ChromeDriverService service = new ChromeDriverService.Builder()
-    //            .withLogLevel(ChromiumDriverLogLevel.DEBUG)
-    ////            .withLogOutput(System.out)
-    //            .build();
+    ChromeDriverService service = new ChromeDriverService.Builder()
+            .withLogLevel(ChromiumDriverLogLevel.DEBUG)
+            .withLogOutput(System.out)
+            .build();
     ChromeOptions options = new ChromeOptions();
     //开启无头模式
     //            options.addArguments("--headless");
@@ -40,9 +42,9 @@ public class ChromeBase {
     //    options.addArguments("blink-settings=imagesEnabled=false");//禁用图片
     //        options.addArguments("--disable-dev-shm-usage");
     options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
-    //    driver = new ChromeDriver(service, options);
+    //    driver = new ChromeDriver(options);
     options.enableBiDi();
-    driver = new ChromeDriver(options);
+    driver = new ChromeDriver(service, options);
   }
 
   @AfterEach
