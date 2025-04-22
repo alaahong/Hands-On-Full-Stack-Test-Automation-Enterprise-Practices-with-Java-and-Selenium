@@ -32,7 +32,7 @@ public class EdgeBase {
     options.addArguments("--start-maximized");
     options.addArguments("--lang=zh-CN");
     options.setAcceptInsecureCerts(Boolean.TRUE);
-    options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
+    options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
     //    options.addArguments("blink-settings=imagesEnabled=false");//禁用图片
     //        options.addArguments("--disable-dev-shm-usage");
     options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));

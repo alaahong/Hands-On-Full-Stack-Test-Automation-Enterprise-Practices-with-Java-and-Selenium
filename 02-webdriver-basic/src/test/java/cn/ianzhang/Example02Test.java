@@ -468,7 +468,7 @@ public class Example02Test extends ChromeBase {
   public void relativeLocatorsAboveTest() {
     //    打开目标页面
     driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/relative_locators.html");
-    //    获取单元格8上方的元素，期望依次获取2 1 3三个单元格的元素
+    //    获取单元格8上方的元素，期望依次获取5 2 4 6 1 3等单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -477,8 +477,8 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("2 1 3");
-    //    获取单元格9上方的元素，期望依次获取3 2 1三个单元格的元素
+    ).isEqualTo("5 2 4 6 1 3");
+    //    获取单元格9上方的元素，期望依次获取6 3 5 2 4 1等单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -487,7 +487,7 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("3 2 1");
+    ).isEqualTo("6 3 5 2 4 1");
   }
 
   /**
@@ -526,7 +526,7 @@ public class Example02Test extends ChromeBase {
   public void relativeLocatorsLeftTest() {
     //    打开目标页面
     driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/relative_locators.html");
-    //    获取单元格6左侧的元素，期望依次获取4 1 7三个单元格的元素
+    //    获取单元格6左侧的元素，期望依次获取5 2 8 4 1 7等单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -535,8 +535,8 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("4 1 7");
-    //    获取单元格9左侧的元素，期望依次获取4 1 7三个单元格的元素
+    ).isEqualTo("5 2 8 4 1 7");
+    //    获取单元格9左侧的元素，期望依次获取8 5 2 7 4 1等单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -545,7 +545,7 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("7 4 1");
+    ).isEqualTo("8 5 2 7 4 1");
   }
 
   /**
@@ -555,7 +555,7 @@ public class Example02Test extends ChromeBase {
   public void relativeLocatorsRightTest() {
     //    打开目标页面
     driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/relative_locators.html");
-    //    获取单元格4右侧的元素，期望依次获取6 3 9三个单元格的元素
+    //    获取单元格4右侧的元素，期望依次获取5 2 8 6 3 9等单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -564,8 +564,8 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("6 3 9");
-    //    获取单元格7右侧的元素，期望依次获取9 6 3三个单元格的元素
+    ).isEqualTo("5 2 8 6 3 9");
+    //    获取单元格7右侧的元素，期望依次获取8 5 2 9 6 3等单元格的元素
     Assertions.assertThat(
             driver
                     .findElements(RelativeLocator
@@ -574,7 +574,7 @@ public class Example02Test extends ChromeBase {
                     .stream()
                     .map(WebElement::getText)
                     .collect(Collectors.joining(" "))
-    ).isEqualTo("9 6 3");
+    ).isEqualTo("8 5 2 9 6 3");
   }
 
   /**

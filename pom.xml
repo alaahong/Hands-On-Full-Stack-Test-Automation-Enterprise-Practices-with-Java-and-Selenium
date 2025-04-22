@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    
     <groupId>cn.ianzhang</groupId>
     <artifactId>code-for-selenium-in-action</artifactId>
     <packaging>pom</packaging>
@@ -13,6 +13,7 @@
         <module>02-webdriver-basic</module>
         <module>03-webdriver-advanced</module>
         <module>07-legacy-selenium-3</module>
+        <module>09-selenium-4-29-0</module>
     </modules>
     <version>1.0-SNAPSHOT</version>
     <developers>
@@ -27,28 +28,28 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
-        <maven-surefire-report-plugin.version>3.0.0-M7</maven-surefire-report-plugin.version>
-        <maven-jxr-plugin.version>3.2.0</maven-jxr-plugin.version>
-        <maven-site-plugin.version>4.0.0-M1</maven-site-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
+        <maven-surefire-report-plugin.version>3.5.3</maven-surefire-report-plugin.version>
+        <maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
+        <maven-site-plugin.version>3.21.0</maven-site-plugin.version>
         <test-failure-ignore-flag>true</test-failure-ignore-flag>
         <!--        dependency version-->
-        <junit.version>5.10.3</junit.version>
-        <selenium.version>4.24.0</selenium.version>
+        <junit.version>5.12.2</junit.version>
+        <selenium.version>4.31.0</selenium.version>
         <assertj.version>3.26.3</assertj.version>
-        <logback.version>1.5.6</logback.version>
+        <logback.version>1.5.18</logback.version>
         <shutterbug.version>1.6</shutterbug.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <awaitility.version>4.2.2</awaitility.version>
-        <slf4j.version>2.0.16</slf4j.version>
-        <lombok.version>1.18.34</lombok.version>
-        <jackson.version>2.17.2</jackson.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <lombok.version>1.18.38</lombok.version>
+        <jackson.version>2.18.3</jackson.version>
         <openpdf.version>2.0.3</openpdf.version>
     </properties>
-
+    
     <build>
         <plugins>
             <plugin>
@@ -81,7 +82,7 @@
                 <configuration>
                     <properties>
                         <configurationParameters>
-<!--                            junit.jupiter.conditions.deactivate = *-->
+                            <!--                            junit.jupiter.conditions.deactivate = *-->
                             junit.jupiter.extensions.autodetection.enabled = true
                             junit.jupiter.testinstance.lifecycle.default = per_class
                         </configurationParameters>
@@ -97,7 +98,7 @@
                         -Dfile.encoding=${project.build.sourceEncoding}
                         <!--                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"-->
                     </argLine>
-                    <systemProperties>
+                    <systemPropertyVariables>
                         <property>
                             <name>allure.results.directory</name>
                             <value>${project.build.directory}/allure-results</value>
@@ -106,7 +107,7 @@
                             <name>allure.report.directory</name>
                             <value>${project.build.directory}/allure-report</value>
                         </property>
-                    </systemProperties>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>
@@ -158,6 +159,12 @@
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>byte-buddy</artifactId>
+                        <groupId>net.bytebuddy</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
@@ -178,6 +185,12 @@
                 <groupId>com.assertthat</groupId>
                 <artifactId>selenium-shutterbug</artifactId>
                 <version>${shutterbug.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>commons-lang3</artifactId>
+                        <groupId>org.apache.commons</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.awaitility</groupId>
@@ -194,7 +207,7 @@
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
-
+            
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-reload4j</artifactId>

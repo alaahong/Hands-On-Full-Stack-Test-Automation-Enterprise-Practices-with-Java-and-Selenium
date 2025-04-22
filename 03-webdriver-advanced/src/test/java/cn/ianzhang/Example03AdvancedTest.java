@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 /**
  * @Author: Ian
  */
-public class Example03AdvancedTest extends ChromeBase {
+public class Example03AdvancedTest extends EdgeBase {
 
 
   /**

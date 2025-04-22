@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.ianzhang</groupId>
+        <artifactId>code-for-selenium-in-action</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>09-selenium-4-29-0</artifactId>
+    
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<!--        cause by removed support for v85 since no longer required by Firefox since v4.30-->
+        <selenium.version>4.29.0</selenium.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>cn.ianzhang</groupId>
+            <artifactId>00-common</artifactId>
+        </dependency>
+    </dependencies>
+</project>

@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 /**
  * @Author: Ian
  */
-public class Example03Test extends ChromeBase {
+public class Example03Test extends EdgeBase {
 
   /**
    * 例程3.1  发送键位
