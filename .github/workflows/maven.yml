@@ -22,15 +22,12 @@ jobs:
           cache: maven
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@latest
-        with:
         # chromium-version: Specify if needed
       - name: Setup Firefox
         uses: browser-actions/setup-firefox@latest
-        with:
         # firefox-version: Specify if needed
       - name: Setup Edge
         uses: browser-actions/setup-edge@latest
-        with:
         # edge-version: Specify if needed
       - name: Build with Maven
         run: mvn -B clean test '-Dmaven.test.failure.ignore=true'
