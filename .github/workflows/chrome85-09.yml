@@ -1,4 +1,4 @@
-name: Module 09 tests on Chrome 85 (Local Chrome)
+name: Module 09 tests on Chrome 85 (Selenoid)
 
 on:
   push:
@@ -23,23 +23,47 @@ jobs:
           java-version: '25-ea'
           cache: maven
 
-      - name: Install Chrome 85
-        id: setup-chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: '85.0.4183.121'
-
-      - name: Show Chrome info
+      - name: Start Selenoid (Chrome 85)
         run: |
-          echo "Chrome path: ${{ steps.setup-chrome.outputs.chrome-path }}"
-          echo "Chrome version: ${{ steps.setup-chrome.outputs.chrome-version }}"
-          ${{ steps.setup-chrome.outputs.chrome-path }} --version || true
+          docker pull aerokube/selenoid:latest-release
+          docker pull selenoid/chrome:85.0
+          mkdir -p selenoid
+          cat > selenoid/browsers.json <<'JSON'
+          {
+            "chrome": {
+              "default": "85.0",
+              "versions": {
+                "85.0": {
+                  "image": "selenoid/chrome:85.0",
+                  "port": "4444",
+                  "path": "/",
+                  "tmpfs": {"/tmp":"size=512m"},
+                  "env": ["TZ=Asia/Shanghai"]
+                }
+              }
+            }
+          }
+          JSON
+          docker run -d --name selenoid \
+            -p 4444:4444 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$GITHUB_WORKSPACE/selenoid/browsers.json:/etc/selenoid/browsers.json:ro" \
+            aerokube/selenoid:latest-release \
+            -limit 4 -conf /etc/selenoid/browsers.json
+          for i in {1..30}; do
+            if curl -sf http://localhost:4444/status | grep -q '"ready":\s*true'; then
+              echo "Selenoid is ready"; break
+            fi
+            sleep 1
+          done
 
-      - name: Build and run tests (module 09) with local Chrome
-        env:
-          CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
-          BROWSER_VERSION: ${{ steps.setup-chrome.outputs.chrome-version }}
-        run: mvn -B -V -pl 09-selenium-4-29-0 -am -DskipTests=false test
+      - name: Build and run tests (module 09 via RemoteWebDriver)
+        run: |
+          mvn -B -V -pl 09-selenium-4-29-0 -am \
+            -DskipTests=false \
+            -Dselenium.remote.url=http://localhost:4444/wd/hub \
+            -DbrowserVersion=85.0 \
+            test
 
       - name: Upload surefire reports
         if: always()

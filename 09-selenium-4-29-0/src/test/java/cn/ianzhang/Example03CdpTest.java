@@ -25,7 +25,7 @@ import java.util.Optional;
 /**
  * @Author: Ian
  */
-public class Example03CdpTest extends ChromeHeadlessBase {
+public class Example03CdpTest extends ChromeRemoteBase {
 
     /**
      * 例程3.29  模拟地理位置
