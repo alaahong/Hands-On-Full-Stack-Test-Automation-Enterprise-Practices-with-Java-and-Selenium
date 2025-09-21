@@ -52,6 +52,7 @@ public class ChromeBase {
 //        options.setCapability("se:bidiEnabled", false);
 //        options.setCapability("se:cdpEnabled", false);
 //    options.setCapability("goog:loggingPrefs", java.util.Map.of("browser", "WARNING"));
+        options.enableBiDi();
         driver = new ChromeDriver(service, options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));

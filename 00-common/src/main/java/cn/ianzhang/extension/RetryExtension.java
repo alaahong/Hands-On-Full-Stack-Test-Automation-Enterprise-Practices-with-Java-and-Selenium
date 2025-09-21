@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * JUnit 5 扩展：遇到 WebDriverException 且包含 ERR_CONNECTION_RESET 时进行重试
- *
+ * <p>
  * 实现要点：
  * - 仅对拦截器链调用一次 invocation.proceed()（第一次尝试）。
  * - 后续重试通过反射直接调用测试方法，避免再次触发其他 InvocationInterceptor（如 Timeout）。

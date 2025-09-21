@@ -3,12 +3,7 @@ package cn.ianzhang;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chromium.ChromiumNetworkConditions;
 import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.chromium.HasNetworkConditions;
@@ -30,8 +25,8 @@ import java.util.Optional;
 /**
  * @Author: Ian
  */
-public class Example03CdpTest extends EdgeBase {
-    
+public class Example03CdpTest extends ChromeHeadlessBase {
+
     /**
      * 例程3.29  模拟地理位置
      */
@@ -54,7 +49,7 @@ public class Example03CdpTest extends EdgeBase {
         //    期望地理位置经度符合预期
         Assertions.assertThat(longitude.getText()).isEqualTo("74.0241");
     }
-    
+
     /**
      * 例程3.30  覆盖设备模式
      */
@@ -79,7 +74,7 @@ public class Example03CdpTest extends EdgeBase {
         //    模拟手机打开窗口的情况下,画面尺寸较小,菜单按钮可见
         Assertions.assertThat(driver.findElement(menuButtonBy).isDisplayed()).isTrue();
     }
-    
+
     /**
      * 例程3.31  其他模拟测试
      */
@@ -108,7 +103,7 @@ public class Example03CdpTest extends EdgeBase {
         //    获取截图文件位置,可以后续校验效果
         Assertions.assertThat(file.getAbsolutePath()).startsWith(System.getProperty("java.io.tmpdir")).endsWith("png");
     }
-    
+
     /**
      * 例程3.32  性能指标
      */
@@ -165,7 +160,7 @@ public class Example03CdpTest extends EdgeBase {
                 NavigationStart = 4908.885616
                 """;
     }
-    
+
     /**
      * 例程3.33  网络状态
      */
@@ -203,7 +198,7 @@ public class Example03CdpTest extends EdgeBase {
         //      再次打开目标网站
         driver.get("https://www.ianzhang.cn");
     }
-    
+
     /**
      * 例程3.34  执行CDP命令
      */
@@ -219,5 +214,5 @@ public class Example03CdpTest extends EdgeBase {
         //    此方法结果将返回Base64格式的页面截图
         Assertions.assertThat(result.containsKey("data")).isTrue();
     }
-    
+
 }

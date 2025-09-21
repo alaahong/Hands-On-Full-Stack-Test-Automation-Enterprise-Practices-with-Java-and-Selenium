@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,6 +13,7 @@
         <module>02-webdriver-basic</module>
         <module>03-webdriver-advanced</module>
         <module>07-legacy-selenium-3</module>
+        <module>09-selenium-4-29-0</module>
     </modules>
     <version>1.0-SNAPSHOT</version>
     <developers>
@@ -24,6 +25,7 @@
     </developers>
     <properties>
         <!--        project setting-->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
@@ -47,6 +49,7 @@
         <lombok.version>1.18.42</lombok.version>
         <jackson.version>2.18.3</jackson.version>
         <openpdf.version>2.0.3</openpdf.version>
+        <wiremock.version>3.13.1</wiremock.version>
     </properties>
 
     <build>
@@ -241,6 +244,12 @@
                 <groupId>com.github.librepdf</groupId>
                 <artifactId>openpdf</artifactId>
                 <version>${openpdf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wiremock</groupId>
+                <artifactId>wiremock</artifactId>
+                <version>${wiremock.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
