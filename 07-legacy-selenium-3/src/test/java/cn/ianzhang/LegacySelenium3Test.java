@@ -21,7 +21,8 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import java.nio.file.Path;
 import java.util.Map;
 
-@ExtendWith(RetryExtension.class)
+
+@ExtendWith({RetryExtension.class})
 @Retry(3)
 public class LegacySelenium3Test {
     protected WebDriver driver;

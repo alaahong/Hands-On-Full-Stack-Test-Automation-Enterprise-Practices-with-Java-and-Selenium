@@ -2,6 +2,7 @@ package cn.ianzhang;
 
 import cn.ianzhang.annotation.Retry;
 import cn.ianzhang.extension.RetryExtension;
+import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * @Author: Ian
  */
-@ExtendWith(RetryExtension.class)
+@ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
 public class Example02Test extends ChromeBase {
     /**

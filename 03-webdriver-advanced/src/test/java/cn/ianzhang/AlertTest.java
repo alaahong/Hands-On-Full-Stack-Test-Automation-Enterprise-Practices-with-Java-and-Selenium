@@ -2,6 +2,7 @@ package cn.ianzhang;
 
 import cn.ianzhang.annotation.Retry;
 import cn.ianzhang.extension.RetryExtension;
+import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
  * @Date: 2024/9/2 22:30
  * @Description:
  */
-@ExtendWith(RetryExtension.class)
+
+@ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
 public class AlertTest {
     @Test

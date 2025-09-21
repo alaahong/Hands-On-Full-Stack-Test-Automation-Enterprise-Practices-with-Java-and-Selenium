@@ -61,7 +61,7 @@ jobs:
         run: |
           mvn -B -V -pl 09-selenium-4-29-0 -am \
             -DskipTests=false \
-            -Dselenium.remote.url=http://localhost:4444/wd/hub \
+            -Dselenium.remote.url=http://localhost:4444/ \
             -DbrowserVersion=85.0 \
             test
 

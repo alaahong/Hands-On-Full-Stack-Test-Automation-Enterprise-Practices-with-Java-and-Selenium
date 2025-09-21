@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Collections;
@@ -18,7 +20,8 @@ public class ChromeRemoteBase {
 
     @BeforeEach
     void setupRemote() {
-        String remoteUrlStr = System.getProperty("selenium.remote.url", "http://localhost:4444/wd/hub");
+        // Default to Selenoid root path ('/') to avoid websocket path issues
+        String remoteUrlStr = System.getProperty("selenium.remote.url", "http://localhost:4444/");
         String browserVersion = System.getProperty("browserVersion", "");
 
         ChromeOptions options = new ChromeOptions();
@@ -41,9 +44,12 @@ public class ChromeRemoteBase {
         }
 
         try {
-            URL remoteUrl = new URL(remoteUrlStr);
-            driver = new RemoteWebDriver(remoteUrl, options);
-        } catch (MalformedURLException e) {
+            URI address = new URL(remoteUrlStr).toURI();
+            driver = RemoteWebDriver.builder()
+                    .oneOf(options)
+                    .address(address)
+                    .build();
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException("非法的远端 URL: " + remoteUrlStr, e);
         }
 

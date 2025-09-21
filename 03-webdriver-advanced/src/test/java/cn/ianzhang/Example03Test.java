@@ -3,6 +3,7 @@ package cn.ianzhang;
 
 import cn.ianzhang.annotation.Retry;
 import cn.ianzhang.extension.RetryExtension;
+import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import com.assertthat.selenium_shutterbug.core.Capture;
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,7 +38,8 @@ import java.util.stream.Collectors;
 /**
  * @Author: Ian
  */
-@ExtendWith(RetryExtension.class)
+
+@ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
 public class Example03Test extends EdgeBase {
 

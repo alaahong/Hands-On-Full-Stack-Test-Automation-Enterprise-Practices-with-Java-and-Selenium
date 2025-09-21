@@ -3,6 +3,7 @@ package cn.ianzhang;
 
 import cn.ianzhang.annotation.Retry;
 import cn.ianzhang.extension.RetryExtension;
+import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +22,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 /**
  * @Author: Ian
  */
-@ExtendWith({RetryExtension.class})
+
+@ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
 public class Example03BasicAuthTest extends EdgeBase {
     private WireMockServer mockServer;

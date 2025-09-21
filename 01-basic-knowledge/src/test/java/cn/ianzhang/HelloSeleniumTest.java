@@ -2,6 +2,7 @@ package cn.ianzhang;
 
 import cn.ianzhang.annotation.Retry;
 import cn.ianzhang.extension.RetryExtension;
+import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
@@ -9,7 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ExtendWith(RetryExtension.class)
+@ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
 public class HelloSeleniumTest {
     //  声明日志
