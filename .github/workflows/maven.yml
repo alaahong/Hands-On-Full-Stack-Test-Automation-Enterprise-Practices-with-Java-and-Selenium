@@ -33,6 +33,9 @@ jobs:
       #   # edge-version: Specify if needed
       - name: Build with Maven
         run: mvn -B clean test '-Dmaven.test.failure.ignore=true'
+      - name: Set browser window size
+        run: |
+          powershell -Command "Start-Process 'chrome' '--window-size=1920,1080'"
 
       - name: Upload screenshots
         if: always()
