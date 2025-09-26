@@ -2,6 +2,7 @@ package cn.ianzhang;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
@@ -31,13 +32,14 @@ public class ChromeBase {
         //禁止gpu渲染
         options.addArguments("--disable-gpu");
         //关闭沙盒模式
-        options.addArguments("–-no-sandbox");
+        options.addArguments("--no-sandbox");
         //disable specifying the browser options
         options.addArguments("--disable-search-engine-choice-screen");
         //disable language download
         options.addArguments("--disable-features=NetworkService,NetworkServiceInProcess,OptimizationGuideModelDownloading,OptimizationHintsFetching,OptimizationTargetPrediction,OptimizationHints");
         options.addArguments("--no-default-browser-check");
         options.addArguments("--start-maximized");
+        options.addArguments("--window-size=1920,1080");
         options.addArguments("--lang=zh-CN");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--ignore-certificate-errors");
@@ -57,6 +59,8 @@ public class ChromeBase {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0)); // 推荐使用显式等待
+        // 再次显式设置窗口尺寸以覆盖无头或平台差异
+        driver.manage().window().setSize(new Dimension(1920, 1080));
     }
 
     @AfterEach
