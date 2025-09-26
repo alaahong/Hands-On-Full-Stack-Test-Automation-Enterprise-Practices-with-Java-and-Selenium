@@ -1,4 +1,4 @@
-name: Module 09 tests on Chrome 85 (Selenoid)
+name: Module 09 tests on Chrome 85 (Selenium Docker)
 
 on:
   push:
@@ -17,42 +17,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java 25 (Temurin)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25-ea'
           cache: maven
 
-      - name: Start Selenoid (Chrome 85)
+      - name: Start selenium/standalone-chrome:85.0-20200921
         run: |
-          docker pull aerokube/selenoid:latest-release
-          docker pull selenoid/chrome:85.0
-          mkdir -p selenoid
-          cat > selenoid/browsers.json <<'JSON'
-          {
-            "chrome": {
-              "default": "85.0",
-              "versions": {
-                "85.0": {
-                  "image": "selenoid/chrome:85.0",
-                  "port": "4444",
-                  "path": "/",
-                  "tmpfs": {"/tmp":"size=512m"},
-                  "env": ["TZ=Asia/Shanghai"]
-                }
-              }
-            }
-          }
-          JSON
-          docker run -d --name selenoid \
-            -p 4444:4444 \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -v "$GITHUB_WORKSPACE/selenoid/browsers.json:/etc/selenoid/browsers.json:ro" \
-            aerokube/selenoid:latest-release \
-            -limit 4 -conf /etc/selenoid/browsers.json
+          docker pull selenium/standalone-chrome:85.0-20200921
+          docker run -d --name selenium-chrome-85 -p 4444:4444 selenium/standalone-chrome:85.0-20200921
           for i in {1..30}; do
-            if curl -sf http://localhost:4444/status | grep -q '"ready":\s*true'; then
-              echo "Selenoid is ready"; break
+            if curl -sf http://localhost:4444/wd/hub/status | grep -q '"ready":\s*true'; then
+              echo "Selenium is ready"; break
             fi
             sleep 1
           done
@@ -61,7 +38,7 @@ jobs:
         run: |
           mvn -B -V -pl 09-selenium-4-29-0 -am \
             -DskipTests=false \
-            -Dselenium.remote.url=http://localhost:4444/ \
+            -Dselenium.remote.url=http://localhost:4444/wd/hub \
             -DbrowserVersion=85.0 \
             test
 
