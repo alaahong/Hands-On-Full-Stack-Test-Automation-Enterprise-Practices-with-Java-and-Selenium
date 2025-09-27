@@ -1,0 +1,49 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25-ea'
+          distribution: 'temurin'
+          cache: maven
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
+      - name: Setup Edge
+        uses: browser-actions/setup-edge@latest
+      - name: Start Xvfb with 1920x1080
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1920x1080x24 &
+      - name: Build with Maven
+        run: mvn -B clean test '-Dmaven.test.failure.ignore=true'
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-screenshots
+          path: artifacts/screenshots
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload surefire reports (Maven)
+        if: always() && hashFiles('**/pom.xml') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: |
+            **/target/surefire-reports/**
+            **/target/failsafe-reports/**
+          if-no-files-found: ignore
+          retention-days: 14
