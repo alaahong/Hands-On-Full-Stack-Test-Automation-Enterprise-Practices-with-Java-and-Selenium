@@ -11,6 +11,9 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chromium.ChromiumDriverLogLevel;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Collections;
 
@@ -21,11 +24,8 @@ public class ChromeBase {
     protected WebDriver driver;
 
     @BeforeEach
-    void setupTest() {
-        ChromeDriverService service = new ChromeDriverService.Builder()
-                .withLogLevel(ChromiumDriverLogLevel.WARNING)
-                .withLogOutput(System.out)
-                .build();
+    void setupTest() throws IOException {
+        ChromeDriverService service = new ChromeDriverService.Builder().withLogLevel(ChromiumDriverLogLevel.WARNING).withLogOutput(System.out).build();
         ChromeOptions options = new ChromeOptions();
         //开启无头模式
         //            options.addArguments("--headless");
@@ -55,6 +55,9 @@ public class ChromeBase {
 //        options.setCapability("se:cdpEnabled", false);
 //    options.setCapability("goog:loggingPrefs", java.util.Map.of("browser", "WARNING"));
         options.enableBiDi();
+// Add this to use a unique temp directory for Chrome user data
+        Path tempUserDataDir = Files.createTempDirectory("chrome-user-data");
+        options.addArguments("--user-data-dir=" + tempUserDataDir.toAbsolutePath().toString());
         driver = new ChromeDriver(service, options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
