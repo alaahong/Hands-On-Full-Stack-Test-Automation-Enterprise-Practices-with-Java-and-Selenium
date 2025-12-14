@@ -32,28 +32,17 @@ public class WebDriverBase {
 
     @BeforeEach
     void setupTest() throws IOException {
-        String browser = System.getenv("BROWSER");
+        String browser = System.getProperty("BROWSER", System.getenv("BROWSER"));
         if (browser == null || browser.isEmpty()) {
             browser = "chrome";
         }
-
         switch (browser.toLowerCase()) {
-            case "firefox":
-                setupFirefox();
-                break;
-            case "edge":
-                setupEdge();
-                break;
-            case "chrome-remote":
-                setupChromeRemote();
-                break;
-            case "chrome-headless":
-                setupChromeHeadless();
-                break;
-            case "chrome":
-            default:
-                setupChrome();
-                break;
+            case "firefox" -> setupFirefox();
+            case "edge" -> setupEdge();
+            case "chrome-remote" -> setupChromeRemote();
+            case "chrome-headless" -> setupChromeHeadless();
+//            case "chrome" -> setupChrome();
+            default -> setupChrome();
         }
     }
 
@@ -65,8 +54,8 @@ public class WebDriverBase {
         options.addArguments("--disable-search-engine-choice-screen");
         options.addArguments("--disable-features=NetworkService,NetworkServiceInProcess,OptimizationGuideModelDownloading,OptimizationHintsFetching,OptimizationTargetPrediction,OptimizationHints");
         options.addArguments("--no-default-browser-check");
-        options.addArguments("--start-maximized");
-        options.addArguments("--window-size=1920,1080");
+//        options.addArguments("--start-maximized");
+        options.addArguments("--window-size=1024,768");
         options.addArguments("--lang=zh-CN");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
@@ -81,7 +70,7 @@ public class WebDriverBase {
         options.addArguments("--user-data-dir=" + tempUserDataDir.toAbsolutePath());
         driver = new ChromeDriver(service, options);
         configureDriver();
-        driver.manage().window().setSize(new Dimension(1920, 1080));
+        driver.manage().window().setSize(new Dimension(1024, 768));
     }
 
     private void setupChromeHeadless() {
@@ -90,12 +79,12 @@ public class WebDriverBase {
                 .withLogOutput(System.out)
                 .build();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        options.addArguments("--headless=new");
         options.addArguments("--disable-gpu");
         options.addArguments("–-no-sandbox");
         options.addArguments("--no-default-browser-check");
-        options.addArguments("--start-maximized");
-        options.addArguments("--window-size=1920,1080");
+//        options.addArguments("--start-maximized");
+        options.addArguments("--window-size=1024,768");
         options.addArguments("--lang=zh-CN");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
@@ -108,7 +97,7 @@ public class WebDriverBase {
         options.enableBiDi();
         driver = new ChromeDriver(service, options);
         configureDriver();
-        driver.manage().window().setSize(new Dimension(1920, 1080));
+        driver.manage().window().setSize(new Dimension(1024, 768));
     }
 
     private void setupFirefox() {

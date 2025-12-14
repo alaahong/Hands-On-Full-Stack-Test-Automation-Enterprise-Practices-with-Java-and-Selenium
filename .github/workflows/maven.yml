@@ -33,15 +33,14 @@ jobs:
       # - name: Setup Edge
       #   uses: browser-actions/setup-edge@latest
       #   # edge-version: Specify if needed
+#      - name: Set browser window size
+#        run: |
+#          powershell -Command "Start-Process 'chrome' '--window-size=1920,1080'"
       - name: Build with Maven
         env:
           BROWSER: chrome-headless
           MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
         run: mvn -B clean test '-Dmaven.test.failure.ignore=true'
-      - name: Set browser window size
-        run: |
-          powershell -Command "Start-Process 'chrome' '--window-size=1920,1080'"
-
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4

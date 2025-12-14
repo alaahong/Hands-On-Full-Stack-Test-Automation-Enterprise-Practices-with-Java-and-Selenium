@@ -1,14 +1,14 @@
 package cn.ianzhang.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+@Slf4j
 public final class ScreenshotUtil {
     private static final DateTimeFormatter TS = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmssSSS");
 
@@ -19,7 +19,7 @@ public final class ScreenshotUtil {
         if (!(driver instanceof TakesScreenshot)) return null;
 
         try {
-            String baseDirProp = System.getProperty("screenshots.dir", "artifacts/screenshots");
+            String baseDirProp = System.getProperty("screenshots.dir", "target/artifacts/screenshots");
             Path dir = Paths.get(baseDirProp, sanitize(testClass));
             Files.createDirectories(dir);
 
@@ -29,7 +29,7 @@ public final class ScreenshotUtil {
             byte[] png = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             Files.write(target, png);
 
-            System.out.println("[screenshot] " + target.toAbsolutePath());
+            log.info("[screenshot] " + target.toAbsolutePath());
             return target;
         } catch (IOException e) {
             e.printStackTrace();

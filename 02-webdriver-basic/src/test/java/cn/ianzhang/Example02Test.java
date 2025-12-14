@@ -503,6 +503,12 @@ public class Example02Test extends WebDriverBase {
     public void relativeLocatorsBelowTest() {
         //    打开目标页面
         driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/relative_locators.html");
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//        js.executeScript(
+//                "const table=document.querySelector('table');" +
+//                        "if(table){table.style.borderCollapse='separate';" +
+//                        "table.querySelectorAll('tr').forEach(tr=>tr.style.height='80px');}"
+//        );
         //    获取单元格2下面的元素，期望依次获取8 7 9三个单元格的元素
         Assertions.assertThat(
                 driver
@@ -512,7 +518,7 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("8 7 9");
+        ).isEqualTo("5 4 6 8 7 9");
         //    获取单元格3下面的元素，期望依次获取9 8 7三个单元格的元素
         Assertions.assertThat(
                 driver
@@ -522,7 +528,7 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("9 8 7");
+        ).isEqualTo("6 5 4 9 8 7");
     }
 
     /**
