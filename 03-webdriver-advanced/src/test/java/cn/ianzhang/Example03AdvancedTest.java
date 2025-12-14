@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 
 @ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
-public class Example03AdvancedTest extends EdgeBase {
+public class Example03AdvancedTest extends WebDriverBase {
     /**
      * 例程3.24  HasLogEvents完成事件监控
      */

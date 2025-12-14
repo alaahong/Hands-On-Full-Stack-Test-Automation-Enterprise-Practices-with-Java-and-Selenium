@@ -25,7 +25,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 @ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
-public class Example03BasicAuthTest extends EdgeBase {
+public class Example03BasicAuthTest extends WebDriverBase {
     private WireMockServer mockServer;
     private String expectedAuth;
 

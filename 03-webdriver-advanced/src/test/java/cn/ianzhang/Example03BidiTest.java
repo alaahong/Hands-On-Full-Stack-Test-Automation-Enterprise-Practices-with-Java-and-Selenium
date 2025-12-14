@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
-public class Example03BidiTest extends ChromeBase {
+public class Example03BidiTest extends WebDriverBase {
     @Test
     void createWindowTest() {
         //    利用WebDriver创建新窗口

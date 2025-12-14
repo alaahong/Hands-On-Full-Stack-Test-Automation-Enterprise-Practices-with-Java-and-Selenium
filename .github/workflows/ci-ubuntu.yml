@@ -30,6 +30,9 @@ jobs:
           export DISPLAY=:99
           Xvfb :99 -screen 0 1920x1080x24 &
       - name: Build with Maven
+        env:
+          BROWSER: chrome-headless
+          MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
         run: mvn -B clean test '-Dmaven.test.failure.ignore=true'
       - name: Upload screenshots
         if: always()

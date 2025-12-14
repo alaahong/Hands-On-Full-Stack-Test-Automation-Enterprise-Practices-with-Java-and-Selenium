@@ -34,6 +34,9 @@ jobs:
       #   uses: browser-actions/setup-edge@latest
       #   # edge-version: Specify if needed
       - name: Build with Maven
+        env:
+          BROWSER: chrome-headless
+          MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
         run: mvn -B clean test '-Dmaven.test.failure.ignore=true'
       - name: Set browser window size
         run: |

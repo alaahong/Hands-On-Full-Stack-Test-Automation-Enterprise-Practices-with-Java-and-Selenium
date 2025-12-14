@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
-public class Example02Test extends ChromeBase {
+public class Example02Test extends WebDriverBase {
     /**
      * 例程2.1  打开百度网站首页
      */

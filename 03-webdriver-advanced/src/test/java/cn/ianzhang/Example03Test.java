@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 @ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
-public class Example03Test extends EdgeBase {
+public class Example03Test extends WebDriverBase {
 
     /**
      * 例程3.1  发送键位

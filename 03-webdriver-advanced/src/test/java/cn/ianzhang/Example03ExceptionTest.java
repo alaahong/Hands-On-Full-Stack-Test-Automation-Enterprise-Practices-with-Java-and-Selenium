@@ -25,7 +25,7 @@ import java.util.Date;
 
 @ExtendWith({RetryExtension.class, JUnit5ScreenshotOnFailure.class})
 @Retry(3)
-public class Example03ExceptionTest extends ChromeBase {
+public class Example03ExceptionTest extends WebDriverBase {
 
     /**
      * 例程3.21  Selenium异常模拟
