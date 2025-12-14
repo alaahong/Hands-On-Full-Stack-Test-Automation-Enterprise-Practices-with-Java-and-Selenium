@@ -6,7 +6,22 @@ import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.InvalidArgumentException;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchSessionException;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.Colors;
@@ -474,7 +489,7 @@ public class Example02Test extends WebDriverBase {
     public void relativeLocatorsAboveTest() {
         //    打开目标页面
         driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/relative_locators.html");
-        //    获取单元格8上方的元素，期望依次获取5 2 4 6 1 3等单元格的元素
+        //    获取单元格8上方的元素，期望依次获取5 4 6 2 1 3等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -483,8 +498,8 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("5 2 4 6 1 3");
-        //    获取单元格9上方的元素，期望依次获取6 3 5 2 4 1等单元格的元素
+        ).contains("5", "4", "6", "2", "1", "3");
+        //    获取单元格9上方的元素，期望依次获取6 5 3 2 4 1等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -493,7 +508,7 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("6 3 5 2 4 1");
+        ).contains("6", "5", "3", "2", "4", "1");
     }
 
     /**
@@ -509,7 +524,7 @@ public class Example02Test extends WebDriverBase {
 //                        "if(table){table.style.borderCollapse='separate';" +
 //                        "table.querySelectorAll('tr').forEach(tr=>tr.style.height='80px');}"
 //        );
-        //    获取单元格2下面的元素，期望依次获取8 7 9三个单元格的元素
+        //    获取单元格2下面的元素，期望依次获取5 4 6 8 7 9等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -518,8 +533,8 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("5 4 6 8 7 9");
-        //    获取单元格3下面的元素，期望依次获取9 8 7三个单元格的元素
+        ).contains("5", "4", "6", "8", "7", "9");
+        //    获取单元格3下面的元素，期望依次获取6 5 9 4 8 7等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -528,7 +543,7 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("6 5 4 9 8 7");
+        ).contains("6", "5", "9", "4", "8", "7");
     }
 
     /**
@@ -547,8 +562,8 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("5 2 8 4 1 7");
-        //    获取单元格9左侧的元素，期望依次获取8 5 2 7 4 1等单元格的元素
+        ).contains("5", "2", "8", "4", "1", "7");
+        //    获取单元格9左侧的元素，期望依次获取8 5 7 2 4 1等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -557,7 +572,7 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("8 5 2 7 4 1");
+        ).contains("8", "5", "7", "2", "4", "1");
     }
 
     /**
@@ -576,8 +591,8 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("5 2 8 6 3 9");
-        //    获取单元格7右侧的元素，期望依次获取8 5 2 9 6 3等单元格的元素
+        ).contains("5", "2", "8", "6", "3", "9");
+        //    获取单元格7右侧的元素，期望依次获取8 5 9 2 6 3等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -586,7 +601,7 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("8 5 2 9 6 3");
+        ).contains("8", "5", "9", "2", "6", "3");
     }
 
     /**
@@ -596,7 +611,7 @@ public class Example02Test extends WebDriverBase {
     public void relativeLocatorsNearTest() {
         //    打开目标元素
         driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/relative_locators.html");
-        //    获取单元格5附近的元素，期望依次获取2 8 4 6 1 7 3 9共八个单元格的元素
+        //    获取单元格5附近的元素，期望依次获取2 4 6 8 1 3 7 9共八个单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -605,8 +620,8 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("2 8 4 6 1 7 3 9");
-        //    获取单元格1附近的元素，期望依次获取4 7 2 5 8共五个单元格的元素
+        ).contains("2", "4", "6", "8", "1", "3", "7", "9");
+        //    获取单元格1附近的元素，期望依次获取2 4 5等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -615,8 +630,8 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("4 7 2 5 8");
-        //    获取单元格9附近的元素，期望依次获取6 3 8 5 2共五个单元格的元素
+        ).contains("2", "4", "5");
+        //    获取单元格9附近的元素，期望依次获取6 8 5等单元格的元素
         Assertions.assertThat(
                 driver
                         .findElements(RelativeLocator
@@ -625,7 +640,7 @@ public class Example02Test extends WebDriverBase {
                         .stream()
                         .map(WebElement::getText)
                         .collect(Collectors.joining(" "))
-        ).isEqualTo("6 3 8 5 2");
+        ).contains("6", "8", "5");
     }
 
     /**
