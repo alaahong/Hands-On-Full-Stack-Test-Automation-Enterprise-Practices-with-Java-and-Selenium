@@ -19,6 +19,8 @@ jobs:
           cache: maven
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: 143  # compatible with Selenium 4.39.0
       - name: Setup Firefox
         uses: browser-actions/setup-firefox@latest
       - name: Setup Edge
