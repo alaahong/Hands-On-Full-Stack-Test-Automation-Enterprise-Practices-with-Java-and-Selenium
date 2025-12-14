@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '25-ea'
+          java-version: '25'
           cache: maven
 
       - name: Start selenium/standalone-chrome:85.0-20200921
