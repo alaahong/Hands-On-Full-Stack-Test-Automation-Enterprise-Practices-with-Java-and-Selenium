@@ -57,6 +57,7 @@ public class WebDriverBase {
 //        options.addArguments("--start-maximized");
         options.addArguments("--window-size=1024,768");
         options.addArguments("--lang=zh-CN");
+        options.addArguments("--allow-insecure-localhost");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
         options.addArguments("--ignore-certificate-errors");
@@ -83,6 +84,7 @@ public class WebDriverBase {
         options.addArguments("--disable-gpu");
         options.addArguments("–-no-sandbox");
         options.addArguments("--no-default-browser-check");
+        options.addArguments("--allow-insecure-localhost");
 //        options.addArguments("--start-maximized");
         options.addArguments("--window-size=1024,768");
         options.addArguments("--lang=zh-CN");
