@@ -47,13 +47,13 @@ class VirtualAuthenticatorTest extends WebDriverBase {
         register.click();
 
         new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.textToBePresentInElement(log, "注册成功"));
+                .until(ExpectedConditions.textToBePresentInElement(log, "Registration succeeded"));
         assertThat(authenticate.isEnabled()).isTrue();
 
         authenticate.click();
 
         new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.textToBePresentInElement(log, "认证成功"));
+                .until(ExpectedConditions.textToBePresentInElement(log, "Authentication succeeded"));
         assertThat(log.getText()).contains("credId=");
     }
 }

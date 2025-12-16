@@ -27,6 +27,7 @@ import org.openqa.selenium.remote.http.Route;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -183,7 +184,7 @@ public class Example03AdvancedTest extends WebDriverBase {
     @Test
     public void javascriptExceptionTest() {
         //    定义临时队列存储JavascriptException
-        List<JavascriptException> jsExceptionsList = new LinkedList<>();
+        List<JavascriptException> jsExceptionsList = new CopyOnWriteArrayList<>();
         //    通过HasDevTools接口获取DevTools实例
         DevTools devTools = ((HasDevTools) driver).getDevTools();
         //    创建会话
