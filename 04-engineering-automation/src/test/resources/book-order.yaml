@@ -1,0 +1,9 @@
+orderNumber: "ORDER00001"
+orderDate: "2022-05-01"
+bookDetails:
+  - title: "Java"
+    price: 99.99
+    author: "James Gosling"
+  - title: "Python"
+    price: 88.0
+    author: "Guido van Rossum"

@@ -14,6 +14,7 @@
         <module>03-webdriver-advanced</module>
         <module>07-legacy-selenium-3</module>
         <module>09-selenium-4-39-0</module>
+        <module>04-engineering-automation</module>
     </modules>
     <version>1.0-SNAPSHOT</version>
     <developers>
@@ -50,6 +51,8 @@
         <jackson.version>2.20.1</jackson.version>
         <openpdf.version>2.4.0</openpdf.version>
         <wiremock.version>3.13.2</wiremock.version>
+        <datafaker.version>2.5.3</datafaker.version>
+        <commons-io.version>2.21.0</commons-io.version>
     </properties>
 
     <build>
@@ -256,6 +259,16 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.datafaker</groupId>
+                <artifactId>datafaker</artifactId>
+                <version>${datafaker.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

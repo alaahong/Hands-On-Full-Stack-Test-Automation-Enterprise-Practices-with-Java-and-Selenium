@@ -27,7 +27,7 @@ import java.util.Collections;
 /**
  * @Author: Ian
  */
-public class WebDriverBase {
+public class WebDriverBase implements WebDriverGetter {
     protected WebDriver driver;
 
     @BeforeEach
@@ -169,6 +169,15 @@ public class WebDriverBase {
         configureDriver();
     }
 
+
+    private void setupChromeAndroid() throws IOException {
+        ChromeOptions options = new ChromeOptions();
+        //    https://chromedriver.chromium.org/getting-started/getting-started---android
+        options.setExperimentalOption("androidPackage", "com.android.chrome");
+        //    driver = new RemoteWebDriver(new URL("http://localhost:9515"), options);
+        driver = new ChromeDriver(options);
+    }
+
     private void configureDriver() {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
@@ -182,5 +191,8 @@ public class WebDriverBase {
         }
     }
 
-}
+@Override
+    public WebDriver getWebDriver() {
+        return driver;
+    }}
 

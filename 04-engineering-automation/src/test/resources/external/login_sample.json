@@ -1,0 +1,32 @@
+[
+  {
+    "name": "LoginSample_Input_Username",
+    "type": "id",
+    "value": "username"
+  },
+  {
+    "name": "LoginSample_Input_Password",
+    "type": "id",
+    "value": "password"
+  },
+  {
+    "name": "LoginSample_Button_LoginBtn",
+    "type": "id",
+    "value": "login-btn"
+  },
+  {
+    "name": "LoginSample_Button_ResetBtn",
+    "type": "id",
+    "value": "reset-btn"
+  },
+  {
+    "name": "LoginSample_P_ResultP",
+    "type": "id",
+    "value": "result-p"
+  },
+  {
+    "name": "LoginSample_Label_All",
+    "type": "tag",
+    "value": "label"
+  }
+]

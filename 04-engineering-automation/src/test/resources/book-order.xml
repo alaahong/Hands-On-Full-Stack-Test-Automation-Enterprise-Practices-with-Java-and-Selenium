@@ -1,0 +1,16 @@
+<Order>
+    <orderNumber>ORDER00001</orderNumber>
+    <orderDate>2022-05-01</orderDate>
+    <bookDetails>
+        <bookDetails>
+            <title>Java</title>
+            <price>99.99</price>
+            <author>James Gosling</author>
+        </bookDetails>
+        <bookDetails>
+            <title>Python</title>
+            <price>88.0</price>
+            <author>Guido van Rossum</author>
+        </bookDetails>
+    </bookDetails>
+</Order>

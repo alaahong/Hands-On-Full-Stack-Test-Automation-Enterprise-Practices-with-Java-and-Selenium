@@ -1,0 +1,4 @@
+directory: "src/test/resources/external"
+extensions:
+  - "json"
+recursive: false
