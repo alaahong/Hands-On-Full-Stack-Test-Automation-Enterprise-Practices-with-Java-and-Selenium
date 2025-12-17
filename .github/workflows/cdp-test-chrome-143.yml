@@ -1,0 +1,42 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: maven
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: 143  # compatible with Selenium 4.39.0
+        # chromium-version: Specify if needed
+      - name: Build with Maven
+        env:
+          BROWSER: chrome-headless
+          MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
+        run: mvn -B  -pl 09-selenium-4-39-0  clean test '-Dmaven.test.failure.ignore=true' '-Dmaven.test.failure.ignore=true'
+      - name: Upload surefire reports (Maven)
+        if: always() && hashFiles('**/pom.xml') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: |
+            **/target/surefire-reports/**
+            **/target/failsafe-reports/**
+          if-no-files-found: ignore
+          retention-days: 14

@@ -5,14 +5,18 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 @Slf4j
 public final class ScreenshotUtil {
     private static final DateTimeFormatter TS = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmssSSS");
 
-    private ScreenshotUtil() {}
+    private ScreenshotUtil() {
+    }
 
     public static Path take(TakesScreenshot driver, String testClass, String testMethod) {
         if (driver == null) return null;

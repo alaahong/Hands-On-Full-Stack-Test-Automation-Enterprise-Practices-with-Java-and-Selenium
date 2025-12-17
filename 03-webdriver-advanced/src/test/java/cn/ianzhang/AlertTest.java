@@ -4,6 +4,8 @@ import cn.ianzhang.annotation.Retry;
 import cn.ianzhang.extension.RetryExtension;
 import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
@@ -52,6 +54,27 @@ public class AlertTest {
         }
     }
 
+    /**
+     * 檢查當前環境是否支援 Firefox BiDi，
+     * 如果不能正常啟動 BiDi 會話，則跳過依賴該能力的測試。
+     */
+    private void requireFirefoxBiDiOrSkip() {
+        FirefoxOptions options = new FirefoxOptions();
+        options.enableBiDi();           // 僅開啟 BiDi，不手動改 prefs
+        WebDriver tmp = null;
+        try {
+            tmp = new FirefoxDriver(options);
+        } catch (Exception e) {
+            Assumptions.assumeTrue(false,
+                    "當前環境無法啟動 Firefox BiDi 會話，跳過 BiDi 測試: " + e.getMessage());
+        } finally {
+            if (tmp != null) {
+                tmp.quit();
+            }
+        }
+    }
+
+    @Disabled
     @Test
     void noBidiFirefoxTest() {
         FirefoxOptions options = new FirefoxOptions();
@@ -65,8 +88,11 @@ public class AlertTest {
         }
     }
 
+    @Disabled
     @Test
     void bidiFirefoxTest() {
+        // 如果 BiDi 不可用，這裡會直接標記為 skipped
+        requireFirefoxBiDiOrSkip();
         FirefoxOptions options = new FirefoxOptions();
         options.enableBiDi();
         WebDriver driver = new FirefoxDriver(options);

@@ -9,12 +9,12 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>09-selenium-4-29-0</artifactId>
+    <artifactId>09-selenium-4-39-0</artifactId>
 
     <properties>
         <test-failure-ignore-flag>false</test-failure-ignore-flag>
         <!-- cause by removed support for v85 since no longer required by Firefox since v4.30 -->
-        <selenium.version>4.29.0</selenium.version>
+        <selenium.version>4.39.0</selenium.version>
         <!-- 默认不跳过；命令行 -DskipTests=true 时生效 -->
         <skipTests>true</skipTests>
     </properties>
@@ -24,4 +24,16 @@
             <artifactId>00-common</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

@@ -6,7 +6,32 @@ import cn.ianzhang.watcher.JUnit5ScreenshotOnFailure;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.InvalidArgumentException;
+import org.openqa.selenium.InvalidCookieDomainException;
+import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchSessionException;
+import org.openqa.selenium.NoSuchShadowRootException;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.ScriptTimeoutException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
+import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.UnsupportedCommandException;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -334,19 +359,19 @@ public class Example03ExceptionTest extends WebDriverBase {
                 .isThrownBy(() -> ((JavascriptExecutor) driver).executeScript("alert()"));
     }
 
-  /**
-   * 默认的异常类型
-   */
-  @Test
-  public void testWebDriverException() {
-    //    打开目标页面
-    driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/exception.html");
-    //    获取目标元素
-    driver.findElement(By.id("se-btn")).click();
-    //    期望抛出异常,因为元素不可见
-    Assertions.assertThatExceptionOfType(WebDriverException.class)
-            .isThrownBy(() -> driver.findElement(By.id("se-input"))
-                    .getScreenshotAs(OutputType.BASE64));
-  }
+    /**
+     * 默认的异常类型
+     */
+    @Test
+    public void testWebDriverException() {
+        //    打开目标页面
+        driver.get("https://www.ianzhang.cn/s4ia/03-webdriver-advanced/exception.html");
+        //    获取目标元素
+        driver.findElement(By.id("se-btn")).click();
+        //    期望抛出异常,因为元素不可见
+        Assertions.assertThatExceptionOfType(WebDriverException.class)
+                .isThrownBy(() -> driver.findElement(By.id("se-input"))
+                        .getScreenshotAs(OutputType.BASE64));
+    }
 
 }
