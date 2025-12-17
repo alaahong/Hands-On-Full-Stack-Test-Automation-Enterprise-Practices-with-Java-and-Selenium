@@ -9,7 +9,6 @@ import com.fasterxml.jackson.dataformat.toml.TomlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -26,14 +25,11 @@ import java.util.stream.Collectors;
  * @Description:
  */
 public class JacksonDataDrivenTest extends WebDriverBase {
-    @BeforeEach
-    void setUp() {
-        //    打开目标页面
-        driver.get("https://www.ianzhang.cn/s4ia/04-engineering-automation/data-driven.html");
-    }
 
     @Test
     public void jsonDataTest() throws IOException {
+        //    打开目标页面
+        driver.get("https://www.ianzhang.cn/s4ia/04-engineering-automation/data-driven.html");
         //    定义Json工厂，这也是Jackson的默认实现
         ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
         loadDataThenCompareWithWebPage(objectMapper, "src/test/resources/book-order.json");
@@ -41,6 +37,8 @@ public class JacksonDataDrivenTest extends WebDriverBase {
 
     @Test
     public void yamlDataTest() throws IOException {
+        //    打开目标页面
+        driver.get("https://www.ianzhang.cn/s4ia/04-engineering-automation/data-driven.html");
         //    定义YAML工厂
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
         loadDataThenCompareWithWebPage(objectMapper, "src/test/resources/book-order.yaml");
@@ -49,6 +47,8 @@ public class JacksonDataDrivenTest extends WebDriverBase {
 
     @Test
     public void propertiesDataTest() throws IOException {
+        //    打开目标页面
+        driver.get("https://www.ianzhang.cn/s4ia/04-engineering-automation/data-driven.html");
         //    定义JavaProperties工厂
         ObjectMapper objectMapper = new ObjectMapper(new JavaPropsFactory());
         loadDataThenCompareWithWebPage(objectMapper, "src/test/resources/book-order.properties");
@@ -56,6 +56,8 @@ public class JacksonDataDrivenTest extends WebDriverBase {
 
     @Test
     public void tomlDataTest() throws IOException {
+        //    打开目标页面
+        driver.get("https://www.ianzhang.cn/s4ia/04-engineering-automation/data-driven.html");
         //    定义TOML工厂
         ObjectMapper objectMapper = new ObjectMapper(new TomlFactory());
         loadDataThenCompareWithWebPage(objectMapper, "src/test/resources/book-order.toml");
@@ -63,6 +65,8 @@ public class JacksonDataDrivenTest extends WebDriverBase {
 
     @Test
     public void xmlDataTest() throws IOException {
+        //    打开目标页面
+        driver.get("https://www.ianzhang.cn/s4ia/04-engineering-automation/data-driven.html");
         //    创建XML映射实例
         ObjectMapper objectMapper = new XmlMapper();
         loadDataThenCompareWithWebPage(objectMapper, "src/test/resources/book-order.xml");

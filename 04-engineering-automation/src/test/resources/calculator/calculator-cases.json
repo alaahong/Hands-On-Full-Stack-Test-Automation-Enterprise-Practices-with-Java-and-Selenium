@@ -1,0 +1,54 @@
+{
+  "suiteName": "Calculator basic scenarios (JSON)",
+  "cases": [
+    {
+      "description": "正常加法：1 + 2 = 3",
+      "leftOperand": "1",
+      "rightOperand": "2",
+      "operator": "+",
+      "expectedResult": "3",
+      "caseType": "NORMAL"
+    },
+    {
+      "description": "正常减法：5 - 3 = 2",
+      "leftOperand": "5",
+      "rightOperand": "3",
+      "operator": "-",
+      "expectedResult": "2",
+      "caseType": "NORMAL"
+    },
+    {
+      "description": "正常乘法：2 * 4 = 8",
+      "leftOperand": "2",
+      "rightOperand": "4",
+      "operator": "*",
+      "expectedResult": "8",
+      "caseType": "NORMAL"
+    },
+    {
+      "description": "正常除法：10 / 2 = 5",
+      "leftOperand": "10",
+      "rightOperand": "2",
+      "operator": "/",
+      "expectedResult": "5",
+      "caseType": "NORMAL"
+    },
+    {
+      "description": "输入错误：左操作数为空",
+      "leftOperand": "",
+      "rightOperand": "2",
+      "operator": "+",
+      "expectedError": "请输入",
+      "caseType": "INPUT_ERROR"
+    },
+    {
+      "description": "业务错误：除以 0",
+      "leftOperand": "10",
+      "rightOperand": "0",
+      "operator": "/",
+      "expectedError": "0",
+      "caseType": "DIVISION_BY_ZERO"
+    }
+  ]
+}
+
