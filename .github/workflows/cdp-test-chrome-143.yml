@@ -25,6 +25,10 @@ jobs:
         with:
           chrome-version: 143  # compatible with Selenium 4.39.0
         # chromium-version: Specify if needed
+      - name: Maven compile without tests
+        env:
+          MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
+        run: mvn -B clean install -DskipTests
       - name: Build with Maven
         env:
           BROWSER: chrome-headless
