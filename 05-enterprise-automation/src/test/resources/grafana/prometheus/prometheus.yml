@@ -1,0 +1,24 @@
+# Prometheus 最小抓取配置
+# 目标：抓取 Selenium Grid（hub/node）的指标。
+# 注意：部分 selenium 镜像/配置下并不暴露 /metrics（会返回 unknown command）。
+# 因此使用 selenium-exporter 将 /status 转换为 Prometheus 指标。
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["prometheus:9090"]
+
+  # Selenium exporter（把 Grid status 转成 Prometheus metrics）
+  - job_name: selenium-exporter
+    static_configs:
+      - targets: ["selenium-exporter:9278"]
+
+  # Tempo 本身也会有 /metrics（用于基础自监控）
+  - job_name: tempo
+    static_configs:
+      - targets: ["tempo:3200"]

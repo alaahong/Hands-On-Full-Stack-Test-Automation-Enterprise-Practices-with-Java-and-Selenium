@@ -1,6 +1,10 @@
 package cn.ianzhang.calculator;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,15 +22,15 @@ public class CalculatorPage {
     private final By displayMain = By.id("calc-display-main");
 
     // 数字按键（基于 data-value 属性）
-    private final By digitKey    = By.cssSelector("button[data-role='key-digit']");
+    private final By digitKey = By.cssSelector("button[data-role='key-digit']");
 
     // 运算符按键（基于 data-op 属性）
     private final By operatorKey = By.cssSelector("button[data-role='key-operator']");
 
     // 功能键
-    private final By clearAllKey   = By.id("calc-key-clear-all");
+    private final By clearAllKey = By.id("calc-key-clear-all");
     private final By clearEntryKey = By.id("calc-key-clear-entry");
-    private final By equalKey      = By.id("calc-key-equal");
+    private final By equalKey = By.id("calc-key-equal");
 
     public CalculatorPage(WebDriver driver) {
         this.driver = driver;

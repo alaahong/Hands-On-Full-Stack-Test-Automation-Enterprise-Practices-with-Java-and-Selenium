@@ -1,0 +1,31 @@
+# Tempo 单机最小配置（本地磁盘存储）
+# 文档：https://grafana.com/docs/tempo/latest/configuration/
+
+server:
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+ingester:
+  max_block_duration: 5m
+
+compactor:
+  compaction:
+    block_retention: 168h
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /var/tempo/traces
+
+# 说明：Tempo 不同版本对 metrics-generator 的配置结构差异较大。
+# 为保证“最小可运行 + OTLP 外部输入”，这里先不启用 metrics-generator。
+# 如需 service-graph/span-metrics，可后续按当前镜像版本补齐配置。

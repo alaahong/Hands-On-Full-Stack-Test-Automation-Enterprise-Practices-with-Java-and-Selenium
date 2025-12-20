@@ -7,5 +7,5 @@ import org.openqa.selenium.WebDriver;
  * @Description:
  */
 public interface WebDriverGetter {
-  WebDriver getWebDriver();
+    WebDriver getWebDriver();
 }

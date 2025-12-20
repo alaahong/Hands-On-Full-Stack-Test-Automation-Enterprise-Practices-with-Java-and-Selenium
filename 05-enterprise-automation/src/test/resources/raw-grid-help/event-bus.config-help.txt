@@ -1,0 +1,156 @@
+﻿Configuration help for Toml config file
+
+In case of parsing errors, validate the config using https://www.toml-lint.com/
+
+Refer https://toml.io/en/ for TOML usage guidance
+
+[server]
+# Whether the Selenium server should allow web browser connections from any host
+# Type: boolean
+# Default: false
+# Example: 
+allow-cors = false
+
+
+# Whether the server should bind to the host address/name, or only use it to report its reachable url. Helpful in complex network topologies where the server cannot report itself with the current IP/hostname but rather an external IP or hostname (e.g. inside a Docker container).
+# Type: boolean
+# Default: true
+# Example: 
+bind-host = true
+
+
+# External URL where component is generally available. Useful on complex network topologies when components are on different networks and proxy servers are involved.
+# Type: string
+# Example: 
+external-url = http://10.0.1.1:33333
+
+
+# Server IP or hostname: usually determined automatically.
+# Type: string
+# Example: 
+host = "localhost"
+
+
+# Server certificate for https. Get more detailed information by running "java -jar selenium-server.jar info security"
+# Type: path
+# Example: 
+https-certificate = "/path/to/cert.pem"
+
+
+# Private key for https. Get more detailed information by running "java -jar selenium-server.jar info security"
+# Type: path
+# Example: 
+https-private-key = "/path/to/key.pkcs8"
+
+
+# Maximum number of listener threads. Default value is: (available processors) * 3.
+# Type: int
+# Default: 0
+# Example: 
+max-threads = 12
+
+
+# Port to listen on. There is no default as this parameter is used by different components, for example Router/Hub/Standalone will use 4444 and Node will use 5555.
+# Type: integer
+# Example: 
+port = 5557
+
+
+# Node registration secret
+# Type: string
+# Example: 
+registration-secret = "Hunter2"
+
+
+[logging]
+# Enable http logging. Tracing should be enabled to log http logs.
+# Type: boolean
+# Default: false
+# Example: 
+http-logs = false
+
+
+# Log encoding
+# Type: string
+# Example: 
+log-encoding = "UTF-8"
+
+
+# File to write out logs. Ensure the file path is compatible with the operating system's file path. Windows path example: \\path\to\file\gridlog.log OR C:\path\path\to\file\gridlog.log Linux/Unix/MacOS path example: /path/to/file/gridlog.log
+# Type: string
+# Example: 
+log-file = '\\path\to\file\gridlog.log'
+
+# Example: 
+log-file = 'C:\path\path\to\file\gridlog.log'
+
+# Example: 
+log-file = '/path/to/file/gridlog.log'
+
+
+# Log level. Default logging level is INFO. Log levels are described here https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
+# Type: string
+# Default: INFO
+# Example: 
+log-level = "INFO"
+
+
+# Format of the timestamp in log output
+# Type: string
+# Example: 
+log-timestamp-format = HH:mm:ss.SSS
+
+
+# Use plain log lines
+# Type: boolean
+# Default: true
+# Example: 
+plain-logs = true
+
+
+# Use structured logs
+# Type: boolean
+# Default: false
+# Example: 
+structured-logs = false
+
+
+# Enable trace collection
+# Type: boolean
+# Default: true
+# Example: 
+tracing = true
+
+
+[events]
+# Whether the connection string should be bound or connected. When true, the component will be bound to the Event Bus (as in the Event Bus will also be started by the component, typically by the Distributor and the Hub). When false, the component will connect to the Event Bus.
+# Type: boolean
+# Example: 
+bind = true
+
+
+# How often, in seconds, will the EventBus socket send heartbeats
+# Type: int
+# Default: 0
+# Example: 
+eventbus-heartbeat-period = 30
+
+
+# Full classname of non-default event bus implementation
+# Type: string
+# Example: 
+implementation = "org.openqa.selenium.events.zeromq.ZeroMqEventBus"
+
+
+# Connection string for publishing events to the event bus
+# Type: string
+# Example: 
+publish = "tcp://*:4442"
+
+
+# Connection string for subscribing to events from the event bus
+# Type: string
+# Example: 
+subscribe = "tcp://*:4443"
+
+

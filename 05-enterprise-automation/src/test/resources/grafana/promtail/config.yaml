@@ -1,0 +1,63 @@
+# Promtail 最小配置：通过 Docker Service Discovery 发现容器并抓取 stdout/stderr。
+# 这避免了 Windows/WSL2 下访问宿主机容器日志文件路径不一致的问题。
+#
+# 关键点：
+# - 挂载 /var/run/docker.sock
+# - 使用 docker_sd_configs
+# - relabel 过滤我们关心的容器，并打上 job/container 等标签
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: docker-containers
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+
+    # 过滤只采集本 compose 的关键容器日志（也可放宽）
+    relabel_configs:
+      - source_labels: [__meta_docker_container_name]
+        regex: "/(grafana|loki|tempo|prometheus|selenium-hub|selenium-node-chrome)"
+        action: keep
+
+      - source_labels: [__meta_docker_container_name]
+        target_label: container
+        regex: "/(.*)"
+        replacement: "$1"
+
+      - source_labels: [__meta_docker_container_image]
+        target_label: image
+
+      - source_labels: [__meta_docker_container_label_com_docker_compose_service]
+        target_label: service
+
+      # 把 selenium hub/node 作为 job 维度，方便 Grafana Explore 查询
+      - source_labels: [__meta_docker_container_name]
+        regex: "/selenium-hub"
+        target_label: job
+        replacement: "selenium-hub"
+
+      - source_labels: [__meta_docker_container_name]
+        regex: "/selenium-node-.*"
+        target_label: job
+        replacement: "selenium-node"
+
+    pipeline_stages:
+      # 尝试解析 Docker JSON log（大多数情况下是 {log, stream, time}）
+      - docker: {}
+      # 把 time 字段作为日志时间戳
+      - timestamp:
+          source: time
+          format: RFC3339Nano
+      # 把 log 字段作为最终 message
+      - output:
+          source: log
+

@@ -1,0 +1,170 @@
+# Grafana + Loki + Promtail + Tempo + Selenium Grid（Hub/Node）
+# 目标：在本地用 Docker 一键拉起可观测性三大支柱：logs/metrics/traces，并保证互通。
+# - Logs: Promtail -> Loki -> Grafana Explore
+# - Traces: (OTel SDK/外部OTel) -> Tempo -> Grafana Explore
+# - Metrics: Prometheus 抓取各组件 /metrics（含 Selenium），Grafana 展示
+#
+# 说明：
+# 1) Windows Docker Desktop 下 Promtail 采集“容器文件日志”不稳定，因此这里用 docker_sd_configs + docker.sock 发现容器，
+#    再通过 promtail 的 docker target 读取容器 stdout/stderr（无需访问宿主机日志文件）。
+# 2) Selenium 官方镜像默认会打印日志到 stdout，Promtail 可直接采集。
+# 3) Selenium 4 默认暴露 Prometheus metrics：/metrics（端口与 Grid Web 端口一致）。
+#
+# 需求前置：
+# - Docker Desktop 已启用 Linux containers
+# - 本机端口 3000/3100/3200/4317/4318/4444/5555/9090 未被占用
+
+name: selenium-observability
+
+services:
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      # 初次启动导入即可；生产请改为安全密码并用 secret 管理
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      # 允许 Trace -> Logs 相关联（Tempo 里返回的 traceId，可用 Loki 查询）
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor,tempoSearch
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3000:3000" # Grafana UI
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+    networks:
+      - obs
+
+  loki:
+    image: grafana/loki:3.2.1
+    container_name: loki
+    command: ["-config.file=/etc/loki/config.yaml"]
+    restart: unless-stopped
+    volumes:
+      - ./loki/config.yaml:/etc/loki/config.yaml:ro
+      - loki-data:/loki
+    ports:
+      - "3100:3100" # Loki HTTP API（外部可 push：/loki/api/v1/push）
+    networks:
+      - obs
+
+  promtail:
+    image: grafana/promtail:3.2.1
+    container_name: promtail
+    command: ["-config.file=/etc/promtail/config.yaml"]
+    restart: unless-stopped
+    volumes:
+      - ./promtail/config.yaml:/etc/promtail/config.yaml:ro
+      # Promtail 使用 Docker SD 读取容器日志：需要访问 docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - obs
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    container_name: tempo
+    command: ["-config.file=/etc/tempo/config.yaml"]
+    restart: unless-stopped
+    volumes:
+      - ./tempo/config.yaml:/etc/tempo/config.yaml:ro
+      - tempo-data:/var/tempo
+    ports:
+      - "3200:3200" # Tempo HTTP（查询）
+      - "4317:4317" # OTLP gRPC（外部输入）
+      - "4318:4318" # OTLP HTTP（外部输入）
+      - "9095:9095" # Tempo gRPC（Grafana 用 gRPC 访问）
+    networks:
+      - obs
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: prometheus
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090" # Prometheus UI（外部可接入/remote_read 等需自行配置）
+    networks:
+      - obs
+
+  selenium-hub:
+    image: selenium/hub:4.39.0
+    container_name: selenium-hub
+    restart: unless-stopped
+    environment:
+      # Selenium Grid Event Bus
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      # Selenium 日志输出更丰富（可按需调整）
+      - SE_LOG_LEVEL=INFO
+      # 保持对外可访问
+      - SE_BIND_HOST=true
+      # Selenium 内置 tracing 默认导出到 localhost:4317（容器内会连接自己导致拒绝），这里显式指向 tempo
+      - SE_ENABLE_TRACING=true
+      - SE_OTEL_EXPORTER_ENDPOINT=http://tempo:4317
+      - SE_OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+    ports:
+      - "44444:4444" # Grid UI + WebDriver + /status + /metrics
+    networks:
+      - obs
+
+  selenium-node-chrome:
+    image: selenium/node-chrome:4.39.0
+    container_name: selenium-node-chrome
+    restart: unless-stopped
+    shm_size: "2gb"
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_LOG_LEVEL=INFO
+      # 同样将 node 的 tracing 导出指向 tempo
+      - SE_ENABLE_TRACING=true
+      - SE_OTEL_EXPORTER_ENDPOINT=http://tempo:4317
+      - SE_OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - SE_NODE_MAX_SESSIONS=2
+    ports:
+      - "5555:5555" # Node 端口（含 /status /se/grid/node /metrics）
+      - "7900:7900" # noVNC（可选）
+    networks:
+      - obs
+
+  selenium-exporter:
+    build:
+      context: ./selenium-exporter
+      dockerfile: Dockerfile
+    image: local/selenium-exporter:latest
+    container_name: selenium-exporter
+    restart: unless-stopped
+    environment:
+      - SELENIUM_HOST=http://selenium-hub:4444
+    ports:
+      - "9278:9278"
+    depends_on:
+      - selenium-hub
+    networks:
+      - obs
+
+volumes:
+  grafana-data:
+  loki-data:
+  tempo-data:
+  prometheus-data:
+
+networks:
+  obs:
+    driver: bridge

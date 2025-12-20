@@ -1,0 +1,90 @@
+﻿Usage: sessionqueue [options]
+  Options:
+    --allow-cors
+      Whether the Selenium server should allow web browser connections from 
+      any host
+      Default: false
+    --bind-host
+      Whether the server should bind to the host address/name, or only use it 
+      to report its reachable url. Helpful in complex network topologies where 
+      the server cannot report itself with the current IP/hostname but rather 
+      an external IP or hostname (e.g. inside a Docker container).
+      Default: true
+    --config
+      Config file to read from (may be specified more than once)
+    --config-help
+      Output detailed information about config options
+      Default: false
+    --external-url
+      External URL where component is generally available. Useful on complex 
+      network topologies when components are on different networks and proxy 
+      servers are involved.
+    --host
+      Server IP or hostname: usually determined automatically.
+    --http-logs
+      Enable http logging. Tracing should be enabled to log http logs.
+      Default: false
+    --https-certificate
+      Server certificate for https. Get more detailed information by running 
+      "java -jar selenium-server.jar info security"
+    --https-private-key
+      Private key for https. Get more detailed information by running "java 
+      -jar selenium-server.jar info security"
+    --log
+      File to write out logs. Ensure the file path is compatible with the 
+      operating system's file path. Windows path example: 
+      \\path\to\file\gridlog.log OR C:\path\path\to\file\gridlog.log 
+      Linux/Unix/MacOS path example: /path/to/file/gridlog.log
+    --log-encoding
+      Log encoding
+    --log-level
+      Log level. Default logging level is INFO. Log levels are described here 
+      https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html 
+      Default: INFO
+    --log-timestamp-format
+      Format of the timestamp in log output
+    --max-threads
+      Maximum number of listener threads. Default value is: (available 
+      processors) * 3.
+      Default: 0
+    --plain-logs
+      Use plain log lines
+      Default: true
+    -p, --port
+      Port to listen on. There is no default as this parameter is used by 
+      different components, for example Router/Hub/Standalone will use 4444 
+      and Node will use 5555.
+    --registration-secret
+      Node registration secret
+    --session-request-timeout
+      Timeout in seconds. New incoming session request is added to the queue. 
+      Requests sitting in the queue for longer than the configured time will 
+      timeout. 
+      Default: 300
+    --session-request-timeout-period
+      In seconds, how often the timeout for new session requests is checked.
+      Default: 10
+    --session-retry-interval
+      Session creation interval in milliseconds. If all slots are busy, new 
+      session request will be retried after the given interval.
+      Default: 15
+    --sq, --sessionqueue
+      Address of the session queue server.
+    --sessionqueue-batch-size
+      Maximum batch size that can consumed from queue based on the available 
+      slots. 
+      Default: 54
+    --sessionqueue-host
+      Host on which the session queue server is listening.
+    --sessionqueue-port
+      Port on which the session queue server is listening.
+    --structured-logs
+      Use structured logs
+      Default: false
+    --tracing
+      Enable trace collection
+      Default: true
+    --version
+      Displays the version and exits.
+      Default: false
+

@@ -1,0 +1,171 @@
+﻿Configuration help for Toml config file
+
+In case of parsing errors, validate the config using https://www.toml-lint.com/
+
+Refer https://toml.io/en/ for TOML usage guidance
+
+[server]
+# Whether the Selenium server should allow web browser connections from any host
+# Type: boolean
+# Default: false
+# Example: 
+allow-cors = false
+
+
+# Whether the server should bind to the host address/name, or only use it to report its reachable url. Helpful in complex network topologies where the server cannot report itself with the current IP/hostname but rather an external IP or hostname (e.g. inside a Docker container).
+# Type: boolean
+# Default: true
+# Example: 
+bind-host = true
+
+
+# External URL where component is generally available. Useful on complex network topologies when components are on different networks and proxy servers are involved.
+# Type: string
+# Example: 
+external-url = http://10.0.1.1:33333
+
+
+# Server IP or hostname: usually determined automatically.
+# Type: string
+# Example: 
+host = "localhost"
+
+
+# Server certificate for https. Get more detailed information by running "java -jar selenium-server.jar info security"
+# Type: path
+# Example: 
+https-certificate = "/path/to/cert.pem"
+
+
+# Private key for https. Get more detailed information by running "java -jar selenium-server.jar info security"
+# Type: path
+# Example: 
+https-private-key = "/path/to/key.pkcs8"
+
+
+# Maximum number of listener threads. Default value is: (available processors) * 3.
+# Type: int
+# Default: 0
+# Example: 
+max-threads = 12
+
+
+# Port to listen on. There is no default as this parameter is used by different components, for example Router/Hub/Standalone will use 4444 and Node will use 5555.
+# Type: integer
+# Example: 
+port = 5559
+
+
+# Node registration secret
+# Type: string
+# Example: 
+registration-secret = "Hunter2"
+
+
+[logging]
+# Enable http logging. Tracing should be enabled to log http logs.
+# Type: boolean
+# Default: false
+# Example: 
+http-logs = false
+
+
+# Log encoding
+# Type: string
+# Example: 
+log-encoding = "UTF-8"
+
+
+# File to write out logs. Ensure the file path is compatible with the operating system's file path. Windows path example: \\path\to\file\gridlog.log OR C:\path\path\to\file\gridlog.log Linux/Unix/MacOS path example: /path/to/file/gridlog.log
+# Type: string
+# Example: 
+log-file = '\\path\to\file\gridlog.log'
+
+# Example: 
+log-file = 'C:\path\path\to\file\gridlog.log'
+
+# Example: 
+log-file = '/path/to/file/gridlog.log'
+
+
+# Log level. Default logging level is INFO. Log levels are described here https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
+# Type: string
+# Default: INFO
+# Example: 
+log-level = "INFO"
+
+
+# Format of the timestamp in log output
+# Type: string
+# Example: 
+log-timestamp-format = HH:mm:ss.SSS
+
+
+# Use plain log lines
+# Type: boolean
+# Default: true
+# Example: 
+plain-logs = true
+
+
+# Use structured logs
+# Type: boolean
+# Default: false
+# Example: 
+structured-logs = false
+
+
+# Enable trace collection
+# Type: boolean
+# Default: true
+# Example: 
+tracing = true
+
+
+[sessionqueue]
+# Address of the session queue server.
+# Type: uri
+# Example: 
+host = "http://localhost:1237"
+
+
+# Host on which the session queue server is listening.
+# Type: string
+# Example: 
+hostname = "localhost"
+
+
+# Port on which the session queue server is listening.
+# Type: integer
+# Example: 
+port = 1234
+
+
+# Timeout in seconds. New incoming session request is added to the queue. Requests sitting in the queue for longer than the configured time will timeout.
+# Type: int
+# Default: 300
+# Example: 
+session-request-timeout = 300
+
+
+# In seconds, how often the timeout for new session requests is checked.
+# Type: int
+# Default: 10
+# Example: 
+session-request-timeout-period = 10
+
+
+# Session creation interval in milliseconds. If all slots are busy, new session request will be retried after the given interval.
+# Type: int
+# Default: 15
+# Example: 
+session-retry-interval = 15
+
+
+# Maximum batch size that can consumed from queue based on the available slots.
+# Type: int
+# Default: 54
+# Example: 
+sessionqueue-batch-size = 54
+
+

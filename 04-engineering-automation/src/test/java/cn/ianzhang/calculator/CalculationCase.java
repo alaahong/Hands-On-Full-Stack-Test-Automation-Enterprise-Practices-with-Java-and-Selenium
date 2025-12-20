@@ -5,13 +5,6 @@ package cn.ianzhang.calculator;
  */
 public class CalculationCase {
 
-    public enum CaseType {
-        NORMAL,
-        INPUT_ERROR,
-        DIVISION_BY_ZERO,
-        OTHER_ERROR
-    }
-
     private String description;
     private String leftOperand;
     private String rightOperand;
@@ -74,6 +67,13 @@ public class CalculationCase {
 
     public void setCaseType(CaseType caseType) {
         this.caseType = caseType;
+    }
+
+    public enum CaseType {
+        NORMAL,
+        INPUT_ERROR,
+        DIVISION_BY_ZERO,
+        OTHER_ERROR
     }
 }
 

@@ -1,0 +1,160 @@
+﻿Usage: hub [options]
+  Options:
+    --allow-cors
+      Whether the Selenium server should allow web browser connections from 
+      any host
+      Default: false
+    --bind-bus
+      Whether the connection string should be bound or connected. When true, 
+      the component will be bound to the Event Bus (as in the Event Bus will 
+      also be started by the component, typically by the Distributor and the 
+      Hub). When false, the component will connect to the Event Bus.
+    --bind-host
+      Whether the server should bind to the host address/name, or only use it 
+      to report its reachable url. Helpful in complex network topologies where 
+      the server cannot report itself with the current IP/hostname but rather 
+      an external IP or hostname (e.g. inside a Docker container).
+      Default: true
+    --config
+      Config file to read from (may be specified more than once)
+    --config-help
+      Output detailed information about config options
+      Default: false
+    --disable-ui
+      Disable the Grid UI
+      Default: false
+    -d, --distributor
+      Url of the distributor.
+    --distributor-host
+      Host on which the distributor is listening.
+    --distributor-implementation
+      Full classname of non-default distributor implementation
+      Default: org.openqa.selenium.grid.distributor.local.LocalDistributor
+    --distributor-port
+      Port on which the distributor is listening.
+    --eventbus-heartbeat-period
+      How often, in seconds, will the EventBus socket send heartbeats
+      Default: 0
+    --events-implementation
+      Full classname of non-default event bus implementation
+    --external-url
+      External URL where component is generally available. Useful on complex 
+      network topologies when components are on different networks and proxy 
+      servers are involved.
+    --healthcheck-interval
+      How often, in seconds, will the health check run for all Nodes.This 
+      ensures the server can ping all the Nodes successfully.
+      Default: 120
+    --host
+      Server IP or hostname: usually determined automatically.
+    --http-logs
+      Enable http logging. Tracing should be enabled to log http logs.
+      Default: false
+    --https-certificate
+      Server certificate for https. Get more detailed information by running 
+      "java -jar selenium-server.jar info security"
+    --https-private-key
+      Private key for https. Get more detailed information by running "java 
+      -jar selenium-server.jar info security"
+    --log
+      File to write out logs. Ensure the file path is compatible with the 
+      operating system's file path. Windows path example: 
+      \\path\to\file\gridlog.log OR C:\path\path\to\file\gridlog.log 
+      Linux/Unix/MacOS path example: /path/to/file/gridlog.log
+    --log-encoding
+      Log encoding
+    --log-level
+      Log level. Default logging level is INFO. Log levels are described here 
+      https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html 
+      Default: INFO
+    --log-timestamp-format
+      Format of the timestamp in log output
+    --max-threads
+      Maximum number of listener threads. Default value is: (available 
+      processors) * 3.
+      Default: 0
+    --newsession-threadpool-size
+      The Distributor uses a fixed-sized thread pool to create new sessions as 
+      it consumes new session requests from the queue.This allows configuring 
+      the size of the thread pool. The default value is no. of available 
+      processors * 3. Note: If the no. of threads is way greater than the 
+      available processors it will not always increase the performance. A high 
+      number of threads causes more context switching which is an expensive 
+      operation. 
+      Default: 54
+    --password
+      Password clients must use to connect to the server. Both this and the 
+      username need to be set in order to be used.
+    --plain-logs
+      Use plain log lines
+      Default: true
+    -p, --port
+      Port to listen on. There is no default as this parameter is used by 
+      different components, for example Router/Hub/Standalone will use 4444 
+      and Node will use 5555.
+    --publish-events
+      Connection string for publishing events to the event bus
+    --purge-nodes-interval
+      How often, in seconds, will the Distributor purge Nodes that have been 
+      down for a while. This is calculated based on the heartbeat received 
+      from a particular node.
+      Default: 30
+    --registration-secret
+      Node registration secret
+    --reject-unsupported-caps
+      Allow the Distributor to reject a request immediately if the Grid does 
+      not support the requested capability.Rejecting requests immediately is 
+      suitable for Grid set up that does not spin up Nodes on demand.
+      Default: false
+    --relax-checks
+      Relax checks on origin header and content type of incoming requests, in 
+      contravention of strict W3C spec compliance.
+      Default: false
+    --session-request-timeout
+      Timeout in seconds. New incoming session request is added to the queue. 
+      Requests sitting in the queue for longer than the configured time will 
+      timeout. 
+      Default: 300
+    --session-request-timeout-period
+      In seconds, how often the timeout for new session requests is checked.
+      Default: 10
+    --session-retry-interval
+      Session creation interval in milliseconds. If all slots are busy, new 
+      session request will be retried after the given interval.
+      Default: 15
+    --sq, --sessionqueue
+      Address of the session queue server.
+    --sessionqueue-batch-size
+      Maximum batch size that can consumed from queue based on the available 
+      slots. 
+      Default: 54
+    --sessionqueue-host
+      Host on which the session queue server is listening.
+    --sessionqueue-port
+      Port on which the session queue server is listening.
+    --slot-matcher
+      Full classname of non-default slot matcher to use. This is used to 
+      determine whether a Node can support a particular session.
+      Default: org.openqa.selenium.grid.data.DefaultSlotMatcher
+    --slot-selector
+      Full classname of non-default slot selector. This is used to select a 
+      slot in a Node once the Node has been matched.
+      Default: org.openqa.selenium.grid.distributor.selector.DefaultSlotSelector
+    --structured-logs
+      Use structured logs
+      Default: false
+    --sub-path
+      A sub-path that should be considered for all user facing routes on the 
+      Hub/Router/Standalone 
+    --subscribe-events
+      Connection string for subscribing to events from the event bus
+    --tracing
+      Enable trace collection
+      Default: true
+    --username
+      User name clients must use to connect to the server. Both this and 
+      password need to be set in order to be used.
+    --version
+      Displays the version and exits.
+      Default: false
+

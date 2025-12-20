@@ -1,12 +1,12 @@
 package cn.ianzhang.calculator;
 
+import cn.ianzhang.WebDriverBase;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import cn.ianzhang.WebDriverBase;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,13 +14,29 @@ import java.util.stream.Stream;
 
 /**
  * 针对在线计算器页面的 Page Object + 数据驱动自动化示例。
- *
+ * <p>
  * 数据通过 Jackson 从 JSON/YAML 文件加载，
  * 再通过 JUnit 5 参数化测试驱动 Selenium 执行。
  */
 public class CalculatorDataDrivenTest extends WebDriverBase {
 
     private CalculatorPage calculatorPage;
+
+    static Stream<CalculationCase> jsonCases() throws IOException {
+        ObjectMapper mapper = new ObjectMapper(new JsonFactory());
+        mapper.findAndRegisterModules();
+        File file = new File("src/test/resources/calculator/calculator-cases.json");
+        CalculationSuite suite = mapper.readValue(file, CalculationSuite.class);
+        return suite.getCases().stream();
+    }
+
+    static Stream<CalculationCase> yamlCases() throws IOException {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        mapper.findAndRegisterModules();
+        File file = new File("src/test/resources/calculator/calculator-cases.yaml");
+        CalculationSuite suite = mapper.readValue(file, CalculationSuite.class);
+        return suite.getCases().stream();
+    }
 
     @ParameterizedTest(name = "JSON: {0}")
     @MethodSource("jsonCases")
@@ -30,6 +46,8 @@ public class CalculatorDataDrivenTest extends WebDriverBase {
         calculatorPage = new CalculatorPage(driver);
         runCalculatorCase(testCase);
     }
+
+    // ========== 数据提供器 ==========
 
     @ParameterizedTest(name = "YAML: {0}")
     @MethodSource("yamlCases")
@@ -71,23 +89,5 @@ public class CalculatorDataDrivenTest extends WebDriverBase {
                         .isBlank();
             }
         }
-    }
-
-    // ========== 数据提供器 ==========
-
-    static Stream<CalculationCase> jsonCases() throws IOException {
-        ObjectMapper mapper = new ObjectMapper(new JsonFactory());
-        mapper.findAndRegisterModules();
-        File file = new File("src/test/resources/calculator/calculator-cases.json");
-        CalculationSuite suite = mapper.readValue(file, CalculationSuite.class);
-        return suite.getCases().stream();
-    }
-
-    static Stream<CalculationCase> yamlCases() throws IOException {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        mapper.findAndRegisterModules();
-        File file = new File("src/test/resources/calculator/calculator-cases.yaml");
-        CalculationSuite suite = mapper.readValue(file, CalculationSuite.class);
-        return suite.getCases().stream();
     }
 }

@@ -1,0 +1,45 @@
+# Loki 单机最小配置（文件系统存储）
+# 文档：https://grafana.com/docs/loki/latest/configure/
+
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9096
+
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+
+schema_config:
+  configs:
+    - from: 2024-01-01
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+# TSDB 存储下的 compactor（单机也需要）
+compactor:
+  working_directory: /loki/compactor
+
+# 通过 ruler 可选启用告警规则；保留最小配置
+ruler:
+  storage:
+    type: local
+    local:
+      directory: /loki/rules
+  rule_path: /loki/rules
+
+limits_config:
+  allow_structured_metadata: true
+  retention_period: 168h

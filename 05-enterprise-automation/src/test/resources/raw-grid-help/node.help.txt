@@ -1,0 +1,246 @@
+﻿Usage: node [options]
+  Options:
+    --allow-cors
+      Whether the Selenium server should allow web browser connections from 
+      any host
+      Default: false
+    --bind-bus
+      Whether the connection string should be bound or connected. When true, 
+      the component will be bound to the Event Bus (as in the Event Bus will 
+      also be started by the component, typically by the Distributor and the 
+      Hub). When false, the component will connect to the Event Bus.
+    --bind-host
+      Whether the server should bind to the host address/name, or only use it 
+      to report its reachable url. Helpful in complex network topologies where 
+      the server cannot report itself with the current IP/hostname but rather 
+      an external IP or hostname (e.g. inside a Docker container).
+      Default: true
+    --config
+      Config file to read from (may be specified more than once)
+    --config-help
+      Output detailed information about config options
+      Default: false
+    --connection-limit-per-session
+      Let X be the maximum number of concurrent websocket connections per 
+      session. This will ensure one session is not able to exhaust the 
+      connection limit of the host
+      Default: 10
+    --delete-session-on-ui
+      Enable capability to support deleting session on Grid UI. False by 
+      default 
+      Default: false
+    --detect-drivers
+      Autodetect which drivers are available on the current system, and add 
+      them to the Node.
+      Default: true
+    --docker, -D
+      Docker configs which map image name to stereotype capabilities (example: 
+      -D selenium/standalone-firefox:latest '{"browserName": "firefox"}')
+    --docker-api-version
+      Docker API version to use. Pin an API version instead of auto-detecting 
+      by implementation
+    --docker-assets-path
+      Absolute path where assets will be stored
+    --docker-devices
+      Exposes devices to a container. Each device mapping declaration must 
+      have  at least the path of the device in both host and container 
+      separated by a colon like in this example: 
+      /device/path/in/host:/device/path/in/container 
+    --docker-grouping-labels
+      Users to specify custom labels for grouping dynamic containers. This 
+      will make the system more flexible for different platforms and use cases
+    --docker-host
+      Host name where the docker daemon is running
+    --docker-host-config-keys
+      Specify which docker host configuration keys should be passed to browser 
+      containers. Keys name can be found in the Docker API documentation, or 
+      by running `docker inspect` the node-docker container.
+    --docker-port
+      Port where the docker daemon is running
+    --docker-server-start-timeout
+      Max time (in seconds) to wait for the server to successfully start up, 
+      before cancelling the process.
+    --docker-url
+      URL for connecting to the docker daemon
+    --docker-video-image
+      Docker image to be used when video recording is enabled
+      Default: false
+    --drain-after-session-count
+      Drain and shutdown the Node after X sessions have been executed. Useful 
+      for environments like Kubernetes. A value higher than zero enables this 
+      feature. 
+      Default: 0
+    --driver-configuration
+      List of configured drivers a Node supports. It is recommended to provide 
+      this type of configuration through a toml config file to improve 
+      readability. Command line example: --driver-configuration 
+      display-name="Firefox Nightly" max-sessions=2 
+      webdriver-path="/usr/local/bin/geckodriver" 
+      stereotype="{\"browserName\": \"firefox\", \"browserVersion\": \"86\", 
+      \"moz:firefoxOptions\": {\"binary":"/Applications/Firefox 
+      Nightly.app/Contents/MacOS/firefox\"}}" 
+    --driver-factory
+      Mapping of fully qualified class name to a browser configuration that 
+      this matches against. --driver-factory 
+      org.openqa.selenium.example.LynxDriverFactory '{"browserName": "lynx"}'
+    -I, --driver-implementation
+      Drivers that should be checked. If specified, will skip 
+      autoconfiguration. Example: -I "firefox" -I "chrome"
+      Default: []
+    --enable-bidi
+      Enable BiDi proxying in Grid. A Grid admin can disable BiDi if the 
+      network does not allow websockets. True by default
+      Default: true
+    --enable-cdp
+      Enable CDP proxying in Grid. A Grid admin can disable CDP if the network 
+      does not allow websockets. True by default
+      Default: true
+    --enable-managed-downloads
+      When enabled, the Grid node will automatically do the following: 1. 
+      Creates a temporary directory which will now represent the directory 
+      into which files downloaded by Chrome/Firefox/Edge browser will be 
+      under. 2. For every new session, a sub-directory will be created/deleted 
+      so that all files that were downloaded for a given session are stored 
+      in. 
+    --eventbus-heartbeat-period
+      How often, in seconds, will the EventBus socket send heartbeats
+      Default: 0
+    --events-implementation
+      Full classname of non-default event bus implementation
+    --external-url
+      External URL where component is generally available. Useful on complex 
+      network topologies when components are on different networks and proxy 
+      servers are involved.
+    --grid-url
+      Public URL of the Grid as a whole (typically the address of the Hub or 
+      the Router)
+    --heartbeat-period
+      How often, in seconds, will the Node send heartbeat events to the 
+      Distributor to inform it that the Node is up.
+      Default: 60
+    --host
+      Server IP or hostname: usually determined automatically.
+    --http-logs
+      Enable http logging. Tracing should be enabled to log http logs.
+      Default: false
+    --https-certificate
+      Server certificate for https. Get more detailed information by running 
+      "java -jar selenium-server.jar info security"
+    --https-private-key
+      Private key for https. Get more detailed information by running "java 
+      -jar selenium-server.jar info security"
+    --hub
+      The address of the Hub in a Hub-and-Node configuration. This can be a 
+      plain hostname or IP address (`hostname`), in which case the Hub will be 
+      assumed to be `http://hostname:4444`, the `--grid-url` will be the same, 
+      `--publish-events` will be `tcp://hostname:4442` and 
+      `--subscribe-events` will be `tcp://hostname:4443`. If `hostname` 
+      contains a port number, that will be used for `--grid-url` but the URIs 
+      for the event bus will remain the same. Any of these default values may 
+      be overridden but setting the correct flags. If the hostname has  a 
+      protocol (such as `https`) that will be used too.
+    --log
+      File to write out logs. Ensure the file path is compatible with the 
+      operating system's file path. Windows path example: 
+      \\path\to\file\gridlog.log OR C:\path\path\to\file\gridlog.log 
+      Linux/Unix/MacOS path example: /path/to/file/gridlog.log
+    --log-encoding
+      Log encoding
+    --log-level
+      Log level. Default logging level is INFO. Log levels are described here 
+      https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html 
+      Default: INFO
+    --log-timestamp-format
+      Format of the timestamp in log output
+    --max-sessions
+      Maximum number of concurrent sessions. Default value is the number of 
+      available processors.
+      Default: 18
+    --max-threads
+      Maximum number of listener threads. Default value is: (available 
+      processors) * 3.
+      Default: 0
+    --no-vnc-port
+      If VNC is available, sets the port where the local noVNC stream can be 
+      obtained 
+      Default: 7900
+    --node-implementation
+      Full classname of non-default Node implementation. This is used to 
+      manage a session's lifecycle.
+      Default: org.openqa.selenium.grid.node.local.LocalNodeFactory
+    --override-max-sessions
+      The # of available processors is the recommended max sessions value (1 
+      browser session per processor). Setting this flag to true allows the 
+      recommended max value to be overwritten. Session stability and 
+      reliability might suffer as the host could run out of resources.
+      Default: false
+    --plain-logs
+      Use plain log lines
+      Default: true
+    -p, --port
+      Port to listen on. There is no default as this parameter is used by 
+      different components, for example Router/Hub/Standalone will use 4444 
+      and Node will use 5555.
+    --publish-events
+      Connection string for publishing events to the event bus
+    --register-cycle
+      How often, in seconds, the Node will try to register itself for the 
+      first time to the Distributor.
+      Default: 10
+    --register-period
+      How long, in seconds, will the Node try to register to the Distributor 
+      for the first time. After this period is completed, the Node will not 
+      attempt to register again.
+      Default: 120
+    --register-shutdown-on-failure
+      If this flag is enabled, the Node will shut down after the register 
+      period is completed. This is useful for container environments to 
+      restart and register again. If restarted multiple times, the Node 
+      container status will be CrashLoopBackOff.
+      Default: false
+    --registration-secret
+      Node registration secret
+    --selenium-manager
+      When drivers are not available on the current system, use, Selenium 
+      Manager. 
+      Default: false
+    --service-configuration
+      Configuration for the service where calls will be relayed to. It is 
+      recommended to provide this type of configuration through a toml config 
+      file to improve readability. Command line example: 
+      --service-configuration max-sessions=2 stereotype='{"browserName": 
+      "safari", "platformName": "iOS", "appium:platformVersion": "14.5"}}'
+    --service-host
+      Host name where the service that supports WebDriver commands is running
+    --service-port
+      Port where the service that supports WebDriver commands is running
+    --service-protocol-version
+      Enforce a specific protocol version in HttpClient when communicating 
+      with the endpoint service status
+    --service-status-endpoint
+      Endpoint to query the WebDriver service status, an HTTP 200 response is 
+      expected 
+    --service-url
+      URL for connecting to the service that supports WebDriver commands, like 
+      an Appium server or a cloud service.
+    --session-timeout
+      Let X be the session-timeout in seconds. The Node will automatically 
+      kill a session that has not had any activity in the last X seconds. This 
+      will release the slot for other tests.
+      Default: 300
+    --structured-logs
+      Use structured logs
+      Default: false
+    --subscribe-events
+      Connection string for subscribing to events from the event bus
+    --tracing
+      Enable trace collection
+      Default: true
+    --version
+      Displays the version and exits.
+      Default: false
+    --vnc-env-var
+      Environment variable to check in order to determine if a vnc stream is 
+      available or not.
+      Default: [SE_START_XVFB, SE_START_VNC, SE_START_NO_VNC]
+

@@ -191,8 +191,9 @@ public class WebDriverBase implements WebDriverGetter {
         }
     }
 
-@Override
+    @Override
     public WebDriver getWebDriver() {
         return driver;
-    }}
+    }
+}
 

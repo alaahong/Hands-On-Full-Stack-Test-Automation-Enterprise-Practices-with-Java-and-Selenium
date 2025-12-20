@@ -1,0 +1,39 @@
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: true
+    jsonData:
+      # 开启 Trace -> Logs 关联：Tempo 中的 traceId 可作为 Loki 查询条件（需要你的日志里带 trace_id 字段才更精准）
+      derivedFields:
+        - name: trace_id
+          # 注意：Grafana 这里用的是 RE2（不是 PCRE），不支持 (?i) 这类内联 flag。
+          # 这里用字符类实现大小写不敏感，并优先匹配 32 位（也兼容 16 位）。
+          matcherRegex: "(?:[Tt]race[Ii][Dd]|[Tt]race_[Ii][Dd])[:= ]+([0-9a-fA-F]{32}|[0-9a-fA-F]{16})"
+          url: "$${__value.raw}"
+          datasourceUid: tempo
+
+  - name: Tempo
+    uid: tempo
+    type: tempo
+    access: proxy
+    url: http://tempo:3200
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: "loki"
+        spanStartTimeShift: "-1m"
+        spanEndTimeShift: "1m"
+        tags: ["service.name", "job", "container"]
+        filterByTraceID: true
+        filterBySpanID: false
+        customQuery: true
+        # 这里提供一个通用 Loki 查询模板：需要你的日志里至少有 job/container 标签
+        query: '{job="$${__span.tags.job}", container="$${__span.tags.container}"}'
+
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
