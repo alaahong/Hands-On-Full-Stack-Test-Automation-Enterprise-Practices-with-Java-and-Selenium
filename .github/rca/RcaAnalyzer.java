@@ -21,7 +21,7 @@ import java.time.Duration;
  * - The program truncates the input log to roughly the last N characters to keep the prompt size reasonable.
  */
 public class RcaAnalyzer {
-    private static final int MAX_LOG_CHARS = 12000; // last N chars
+    private static final int MAX_LOG_CHARS = 32000; // last N chars
     private static final String OPENROUTER_URL = "https://api.openrouter.ai/v1/chat/completions";
     private static final String DEFAULT_MODEL = "deepseek/deepseek-r1-0528:free"; // fallback model
 
