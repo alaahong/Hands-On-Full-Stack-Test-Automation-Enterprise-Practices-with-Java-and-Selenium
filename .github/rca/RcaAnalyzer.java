@@ -22,7 +22,7 @@ import java.time.Duration;
  */
 public class RcaAnalyzer {
     private static final int MAX_LOG_CHARS = 32000; // last N chars
-    private static final String OPENROUTER_URL = "https://api.openrouter.ai/v1/chat/completions";
+    private static final String OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
     private static final String DEFAULT_MODEL = "deepseek/deepseek-r1-0528:free"; // fallback model
 
     public static void main(String[] args) throws Exception {
@@ -56,13 +56,15 @@ public class RcaAnalyzer {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(OPENROUTER_URL))
-                .timeout(Duration.ofSeconds(60))
+                .timeout(Duration.ofSeconds(120))
                 .header("Content-Type", "application/json")
+                .header("HTTP-Referer", "https://github.com")
                 .header("Authorization", "Bearer " + apiKey)
+                .header("X-Title", "Test")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
                 .build();
 
-        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         String analysis;
         if (resp.statusCode() >= 200 && resp.statusCode() < 300) {
             analysis = parseOpenRouterResponse(resp.body());
