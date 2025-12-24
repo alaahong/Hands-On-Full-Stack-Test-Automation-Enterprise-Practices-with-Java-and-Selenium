@@ -59,7 +59,7 @@ public class Example02Test extends WebDriverBase {
         driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/get.html");
         //    当打开页面操作结束时，期望当前页面为最终重定向的get3.html
         Assertions.assertThat(driver.getCurrentUrl())
-                .endsWith("get.html");
+                .endsWith("get3.html");
         //    同时判断当前页面不为get.html或get2.html
         Assertions.assertThat(driver.getCurrentUrl())
                 .doesNotEndWith("get.html")
@@ -1001,7 +1001,7 @@ public class Example02Test extends WebDriverBase {
         Assertions.assertThat(jsSearchContext
                         .findElement(By.cssSelector("#shadow-content-1"))
                         .getText())
-                .isEqualTo("shadow-content-1");
+                .isEqualTo("shadow-content");
     }
 
     /**
