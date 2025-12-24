@@ -58,7 +58,6 @@ public class RcaAnalyzer {
                 .uri(URI.create(OPENROUTER_URL))
                 .timeout(Duration.ofSeconds(120))
                 .header("Content-Type", "application/json")
-                .header("HTTP-Referer", "https://github.com")
                 .header("Authorization", "Bearer " + apiKey)
                 .header("X-Title", "Test")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
