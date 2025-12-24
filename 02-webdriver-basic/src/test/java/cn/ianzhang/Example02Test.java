@@ -1001,7 +1001,7 @@ public class Example02Test extends WebDriverBase {
         Assertions.assertThat(jsSearchContext
                         .findElement(By.cssSelector("#shadow-content-1"))
                         .getText())
-                .isEqualTo("shadow-content-1");
+                .isEqualTo("shadow-content");
     }
 
     /**

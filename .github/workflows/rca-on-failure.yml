@@ -67,18 +67,39 @@ jobs:
           # paths: from .github/rca, merged log is at repo_root/rca/merged/build.log -> ../../rca/merged/build.log
           java RcaAnalyzer ../../rca/merged/build.log ../../rca/analysis.txt ${{ secrets.OPENROUTER_TOKEN }} ${{ secrets.OPENROUTER_MODEL }}
 
+      - name: Prepare artifact name and timestamped file
+        run: |
+          set -euo pipefail
+          # 使用 UTC 时间戳，格式兼容文件名
+          TIMESTAMP=$(date -u +"%Y%m%dT%H%M%SZ")
+          ARTIFACT_NAME="rca-analysis-${{ github.event.workflow_run.id }}-${TIMESTAMP}"
+          ARTIFACT_FILE="${ARTIFACT_NAME}.txt"
+          echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
+          echo "ARTIFACT_FILE=$ARTIFACT_FILE" >> $GITHUB_ENV
+          mkdir -p rca
+          if [ -f rca/analysis.txt ]; then
+            cp rca/analysis.txt rca/${ARTIFACT_FILE}
+            echo "Prepared rca/${ARTIFACT_FILE}"
+          else
+            # 如果分析文件不存在，创建一个占位文件以避免上传失败
+            echo "No analysis produced" > rca/${ARTIFACT_FILE}
+            echo "Placeholder created rca/${ARTIFACT_FILE}"
+          fi
+          ls -l rca | sed -n '1,200p'
+
       - name: Upload RCA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rca-analysis
-          path: rca/analysis.txt
+          name: ${{ env.ARTIFACT_NAME }}
+          path: rca/${{ env.ARTIFACT_FILE }}
+
       - name: Post analysis as check run annotation
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets. GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const analysisPath = 'rca/analysis.txt';
+            const analysisPath = `rca/${process.env.ARTIFACT_FILE || 'analysis.txt'}`;
             if (fs.existsSync(analysisPath)) {
               const body = fs.readFileSync(analysisPath, 'utf8').slice(0, 64000);
               await github.rest.checks.create({
