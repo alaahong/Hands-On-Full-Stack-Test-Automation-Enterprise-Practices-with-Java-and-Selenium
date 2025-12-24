@@ -26,14 +26,15 @@ public class RcaAnalyzer {
     private static final String DEFAULT_MODEL = "deepseek/deepseek-r1-0528:free"; // fallback model
 
     public static void main(String[] args) throws Exception {
-        if (args.length < 3) {
-            System.err.println("Usage: java RcaAnalyzer <log-file> <output-file> <openrouter_api_key>");
+        if (args.length < 4) {
+            System.err.println("Usage: java RcaAnalyzer <log-file> <output-file> <openrouter_key> <openrouter_model>");
             System.err.println("Optional environment variable: OPENROUTER_MODEL to override the model (e.g. 'gpt-4o-mini')");
             System.exit(2);
         }
         Path logPath = Path.of(args[0]);
         Path outPath = Path.of(args[1]);
         String apiKey = args[2];
+        String model = args[3];
 
         if (!Files.exists(logPath)) {
             System.err.println("Log file not found: " + logPath);
@@ -41,7 +42,9 @@ public class RcaAnalyzer {
         }
 
         // Read model from environment (if provided), otherwise use default
-        String model = System.getenv("OPENROUTER_MODEL");
+        if (model == null || model.isBlank()) {
+            model = System.getenv("OPENROUTER_MODEL");
+        }
         if (model == null || model.isBlank()) {
             model = DEFAULT_MODEL;
         }

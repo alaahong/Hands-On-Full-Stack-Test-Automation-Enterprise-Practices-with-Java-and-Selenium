@@ -60,7 +60,7 @@ jobs:
           OPENROUTER_MODEL: ${{ secrets.OPENROUTER_MODEL }}
         run: |
           # paths: from .github/rca, merged log is at repo_root/rca/merged/build.log -> ../../rca/merged/build.log
-          java RcaAnalyzer ../../rca/merged/build.log ../../rca/analysis.txt "OPENROUTER_TOKEN"
+          java RcaAnalyzer ../../rca/merged/build.log ../../rca/analysis.txt ${{ secrets.OPENROUTER_TOKEN }} ${{ secrets.OPENROUTER_MODEL }}
 
       - name: Upload RCA artifact
         uses: actions/upload-artifact@v4
