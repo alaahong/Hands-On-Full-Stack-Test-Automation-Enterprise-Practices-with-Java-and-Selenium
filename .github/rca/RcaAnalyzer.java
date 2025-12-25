@@ -96,7 +96,7 @@ public class RcaAnalyzer {
         sb.append("BUILD LOG SNIPPET:\n```");
         sb.append(logSnippet);
         sb.append("\n```\n\n");
-        sb.append("Provide the answer in plain text, using headings and short bullet lists.\n");
+        sb.append("Provide the answer in Chinese with plain text, using headings and short bullet lists.\n");
         return sb.toString();
     }
 

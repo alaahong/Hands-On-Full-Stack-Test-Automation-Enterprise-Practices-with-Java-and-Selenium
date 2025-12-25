@@ -556,3 +556,4 @@ dmypy.json
 cython_debug/
 
 /03-webdriver-advanced/screenshots/thumbnails/
+/.vscode/settings.json

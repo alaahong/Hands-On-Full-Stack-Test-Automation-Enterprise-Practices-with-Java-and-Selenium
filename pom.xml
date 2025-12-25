@@ -16,7 +16,6 @@
         <module>09-selenium-4-39-0</module>
         <module>04-engineering-automation</module>
         <module>05-enterprise-automation</module>
-        <module>08-selenium-mcp</module>
     </modules>
     <version>1.0-SNAPSHOT</version>
     <developers>
