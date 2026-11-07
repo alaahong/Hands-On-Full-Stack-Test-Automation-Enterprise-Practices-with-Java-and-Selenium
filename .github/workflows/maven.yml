@@ -12,8 +12,16 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    # The repository name makes the default Windows workspace exceed MAX_PATH.
+    env:
+      GIT_CONFIG_COUNT: 1
+      GIT_CONFIG_KEY_0: core.longpaths
+      GIT_CONFIG_VALUE_0: "true"
     steps:
       - uses: actions/checkout@v5
+      - name: Map short workspace
+        shell: pwsh
+        run: New-Item -ItemType Junction -Path 'C:\work' -Target $env:GITHUB_WORKSPACE | Out-Null
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
@@ -40,7 +48,10 @@ jobs:
         env:
           BROWSER: chrome-headless
           MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
-        run: mvn -B clean test '-Dmaven.test.failure.ignore=true'
+        shell: pwsh
+        run: |
+          Set-Location C:\work
+          mvn -B clean test '-Dmaven.test.failure.ignore=true'
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
