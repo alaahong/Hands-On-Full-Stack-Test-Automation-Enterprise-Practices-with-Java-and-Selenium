@@ -13,7 +13,19 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+      # The repository name makes the default Windows workspace exceed MAX_PATH.
+      - name: Enable Git long paths
+        shell: pwsh
+        run: |
+          git config --global core.longpaths true
+          # actions/checkout temporarily overrides HOME, so set the system config too.
+          git config --system core.longpaths true
+          git config --show-origin --get-all core.longpaths
       - uses: actions/checkout@v5
+      # Run Maven from a short junction so build output paths stay below MAX_PATH.
+      - name: Map short workspace
+        shell: pwsh
+        run: New-Item -ItemType Junction -Path 'C:\work' -Target $env:GITHUB_WORKSPACE | Out-Null
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
@@ -28,12 +40,18 @@ jobs:
       - name: Maven compile without tests
         env:
           MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
-        run: mvn -B clean install -DskipTests
+        shell: pwsh
+        run: |
+          Set-Location C:\work
+          mvn -B clean install -DskipTests
       - name: Build with Maven
         env:
           BROWSER: chrome-headless
           MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
-        run: mvn -B  -pl 09-selenium-4-39-0  clean test '-Dmaven.test.failure.ignore=true' '-Dmaven.test.failure.ignore=true'
+        shell: pwsh
+        run: |
+          Set-Location C:\work
+          mvn -B  -pl 09-selenium-4-39-0  clean test '-Dmaven.test.failure.ignore=true' '-Dmaven.test.failure.ignore=true'
       - name: Upload surefire reports (Maven)
         if: always() && hashFiles('**/pom.xml') != ''
         uses: actions/upload-artifact@v4
