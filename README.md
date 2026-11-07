@@ -60,6 +60,19 @@ BROWSER=firefox mvn -pl 02-webdriver-basic -am test
 mvn -pl 09-selenium-4-39-0 -am test -DskipTests=false
 ```
 
+## 测试站点索引
+
+配套测试实际访问的页面与站点已按章节整理成索引，包含页面地址、
+对应的测试类与例程编号，并区分站内页面、外部站点和本地服务。
+启用 GitHub Pages 后，可通过以下地址访问：
+
+- 中文版：<https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/>
+- English: <https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/en/>
+
+索引源码位于 `docs/`，可直接在浏览器中打开 `docs/index.html`
+（英文版为 `docs/en/index.html`）。如需通过 GitHub Pages 发布，请在仓库
+**Settings → Pages** 中选择 `master` 分支的 `/docs` 目录。
+
 ## 模块导览
 
 | 模块 | 内容 |

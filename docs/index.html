@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>测试站点索引 · 《深入浅出全栈自动化测试——基于Java和Selenium的企业级实践》</title>
+  <meta name="description" content="《深入浅出全栈自动化测试——基于Java和Selenium的企业级实践》配套代码的测试站点目录：按章节索引 ianzhang.cn 站内页面、外部验证站点与本机服务，并标注对应的测试类和例程。">
+  <link rel="canonical" href="https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/">
+  <link rel="alternate" hreflang="zh-CN" href="https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/">
+  <link rel="alternate" hreflang="en" href="https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/en/">
+  <link rel="alternate" hreflang="x-default" href="https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <div class="masthead-top">
+        <p class="book-title">《深入浅出全栈自动化测试——基于Java和Selenium的企业级实践》</p>
+        <nav class="top-links" aria-label="相关链接">
+          <a href="https://www.ianzhang.cn" target="_blank" rel="noopener">配套站点 ianzhang.cn</a>
+          <a href="https://github.com/alaahong/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium" target="_blank" rel="noopener">GitHub 仓库</a>
+          <a class="lang" href="en/" hreflang="en" lang="en">English</a>
+        </nav>
+      </div>
+      <h1>测试站点索引</h1>
+      <p class="lead">本书配套代码的测试站点目录：按章节整理仓库测试代码实际访问的页面与站点，标注对应的测试类与例程编号，方便对照源码定位验证环境。</p>
+      <p class="meta-line" id="stats" aria-label="索引统计"></p>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="sidebar">
+      <p class="sidebar-title">章节</p>
+      <nav class="chips" id="chapter-filter" aria-label="按章节筛选"></nav>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="main-toolbar">
+        <div class="search">
+          <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+          <input id="search" type="search" placeholder="搜索页面、路径、测试类或例程" autocomplete="off" spellcheck="false" aria-label="搜索测试站点">
+          <kbd class="search-hint" aria-hidden="true">/</kbd>
+        </div>
+        <p class="result-line" id="result-line" aria-live="polite"></p>
+      </div>
+
+      <div id="content"></div>
+
+      <div class="empty" id="empty" hidden>
+        <p class="empty-title">没有匹配的站点</p>
+        <p>换一个关键词，或点击「全部条目」查看完整索引。</p>
+      </div>
+
+      <noscript>
+        <p class="noscript">此索引需要 JavaScript 才能按章节展示。你仍可以直接访问 <a href="https://www.ianzhang.cn">https://www.ianzhang.cn</a>。</p>
+      </noscript>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p>索引自测试源码自动整理，最后更新于 <span id="updated"></span>。站内页面部署在 <a href="https://www.ianzhang.cn" target="_blank" rel="noopener">www.ianzhang.cn</a>。</p>
+      <p>外部站点与本地服务可能因网络或环境不可用；本地地址需先启动对应服务。</p>
+    </div>
+  </footer>
+
+  <script src="assets/sites.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

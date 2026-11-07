@@ -1,4 +1,4 @@
-# Examples
+# Companion Code for Hands-On Full-Stack Test Automation: Enterprise Practices with Java and Selenium
 
 [简体中文](README.md)
 
@@ -60,6 +60,20 @@ Tests in `09-selenium-4-39-0` are skipped by default. To run that module:
 ```shell
 mvn -pl 09-selenium-4-39-0 -am test -DskipTests=false
 ```
+
+## Test site index
+
+The pages and sites visited by the companion tests are organized into a
+chapter-by-chapter index, with each URL, the matching test class, and the
+example number. Entries are marked as in-site pages, external sites, or local
+services. Once GitHub Pages is enabled, the index is available at:
+
+- 简体中文: <https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/>
+- English: <https://alaahong.github.io/Hands-On-Full-Stack-Test-Automation-Enterprise-Practices-with-Java-and-Selenium/en/>
+
+The index source lives in `docs/`; open `docs/index.html` (English:
+`docs/en/index.html`) directly in a browser. To publish it with GitHub Pages,
+select the `/docs` folder on the `master` branch under **Settings → Pages**.
 
 ## Modules
 
