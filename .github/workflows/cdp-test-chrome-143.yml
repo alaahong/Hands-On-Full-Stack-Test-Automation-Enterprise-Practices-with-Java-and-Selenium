@@ -51,7 +51,8 @@ jobs:
         shell: pwsh
         run: |
           Set-Location C:\work
-          mvn -B  -pl 09-selenium-4-39-0  clean test '-Dmaven.test.failure.ignore=true' '-Dmaven.test.failure.ignore=true'
+          # Select by artifactId; a relative path does not match when the cwd is the C:\work junction.
+          mvn -B  -pl :09-selenium-4-39-0  clean test '-Dmaven.test.failure.ignore=true' '-Dmaven.test.failure.ignore=true'
       - name: Upload surefire reports (Maven)
         if: always() && hashFiles('**/pom.xml') != ''
         uses: actions/upload-artifact@v4
