@@ -41,7 +41,7 @@
         <test-failure-ignore-flag>true</test-failure-ignore-flag>
         <!--        dependency version-->
         <junit.version>5.13.4</junit.version>
-        <selenium.version>4.39.0</selenium.version>
+        <selenium.version>4.52.0</selenium.version>
         <assertj.version>3.27.6</assertj.version>
         <logback.version>1.5.22</logback.version>
         <shutterbug.version>1.6</shutterbug.version>
@@ -108,34 +108,9 @@
                         <!--                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"-->
                     </argLine>
                     <systemPropertyVariables>
-                        <property>
-                            <name>allure.results.directory</name>
-                            <value>${project.build.directory}/allure-results</value>
-                        </property>
-                        <property>
-                            <name>allure.report.directory</name>
-                            <value>${project.build.directory}/allure-report</value>
-                        </property>
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                        <allure.report.directory>${project.build.directory}/allure-report</allure.report.directory>
                     </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>io.qameta.allure</groupId>
-                <artifactId>allure-maven</artifactId>
-                <version>${allure-maven.version}</version>
-                <executions>
-                    <execution>
-                        <id>allure-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <reportVersion>${allure-junit5.version}</reportVersion>
-                    <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
-                    <reportDirectory>${project.build.directory}/allure-report</reportDirectory>
                 </configuration>
             </plugin>
             <plugin>

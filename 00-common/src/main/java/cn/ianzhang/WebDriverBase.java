@@ -82,7 +82,7 @@ public class WebDriverBase implements WebDriverGetter {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
         options.addArguments("--disable-gpu");
-        options.addArguments("–-no-sandbox");
+        options.addArguments("--no-sandbox");
         options.addArguments("--no-default-browser-check");
         options.addArguments("--allow-insecure-localhost");
 //        options.addArguments("--start-maximized");
@@ -107,7 +107,7 @@ public class WebDriverBase implements WebDriverGetter {
         System.setProperty("webdriver.firefox.driver.loglevel", "warn");
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--disable-gpu");
-        options.addArguments("–-no-sandbox");
+        options.addArguments("--no-sandbox");
         options.addArguments("--disable-search-engine-choice-screen");
         options.addArguments("--disable-features=OptimizationGuideModelDownloading,OptimizationHintsFetching,OptimizationTargetPrediction,OptimizationHints");
         options.addArguments("--no-default-browser-check");
@@ -128,7 +128,7 @@ public class WebDriverBase implements WebDriverGetter {
                 .build();
         EdgeOptions options = new EdgeOptions();
         options.addArguments("--disable-gpu");
-        options.addArguments("–-no-sandbox");
+        options.addArguments("--no-sandbox");
         options.addArguments("--disable-search-engine-choice-screen");
         options.addArguments("--disable-features=OptimizationGuideModelDownloading,OptimizationHintsFetching,OptimizationTargetPrediction,OptimizationHints");
         options.addArguments("--no-default-browser-check");

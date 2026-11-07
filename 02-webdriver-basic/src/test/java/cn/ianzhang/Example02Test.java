@@ -99,9 +99,9 @@ public class Example02Test extends WebDriverBase {
     @Test
     public void getCurrentUrlTest() {
         //    期望返回值包括浏览器地址栏可见的Get参数
-        driver.get("https://www.baidu.com/s?wd=selenium");
+        driver.get("https://www.ianzhang.cn/s4ia/02-webdriver-basic/back_forward.html?wd=selenium");
         Assertions.assertThat(driver.getCurrentUrl())
-                .isEqualTo("https://www.baidu.com/s?wd=selenium");
+                .isEqualTo("https://www.ianzhang.cn/s4ia/02-webdriver-basic/back_forward.html?wd=selenium");
         //    期望返回值包括浏览器自动补全的斜杠
         driver.get("chrome://settings");
         Assertions.assertThat(driver.getCurrentUrl())

@@ -31,7 +31,7 @@ public class ChromeHeadlessBase {
         //禁止gpu渲染
         options.addArguments("--disable-gpu");
         //关闭沙盒模式
-        options.addArguments("–-no-sandbox");
+        options.addArguments("--no-sandbox");
         options.addArguments("--no-default-browser-check");
         options.addArguments("--start-maximized");
         options.addArguments("--lang=zh-CN");

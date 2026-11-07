@@ -35,7 +35,8 @@ public class ExtentReportsTest extends WebDriverBase {
         ExtentTest test = extent.createTest("Open then assert title");
         driver.get("https://www.ianzhang.cn");
         test.log(Status.PASS, "Open https://www.ianzhang.cn");
-        test.log(driver.getTitle().contains("Ian") ? Status.PASS : Status.FAIL, "Title should contain Ian");
+        test.log(driver.getTitle().contains("手中执剑,方能保护所爱之人") ? Status.PASS : Status.FAIL,
+                "Title should contain 手中执剑,方能保护所爱之人");
         test.addScreenCaptureFromBase64String(((TakesScreenshot) driver)
                 .getScreenshotAs(OutputType.BASE64), "Get screenshot");
         test.log(Status.PASS, "Get screenshot");

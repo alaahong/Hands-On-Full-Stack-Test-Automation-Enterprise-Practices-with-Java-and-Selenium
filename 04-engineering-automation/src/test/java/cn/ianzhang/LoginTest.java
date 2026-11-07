@@ -124,6 +124,6 @@ public class LoginTest extends WebDriverBase {
         //    期望抛出异常,因为页面刷新后元素不再存于当前页面
         Assertions.assertThatExceptionOfType(StaleElementReferenceException.class)
                 .isThrownBy(loginPage::isLoaded)
-                .withMessageContaining("element is not attached to the page document");
+                .withMessageContaining("stale element");
     }
 }

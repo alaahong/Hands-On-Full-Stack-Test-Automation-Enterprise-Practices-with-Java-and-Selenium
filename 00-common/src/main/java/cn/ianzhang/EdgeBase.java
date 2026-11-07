@@ -30,7 +30,7 @@ public class EdgeBase {
         //禁止gpu渲染
         options.addArguments("--disable-gpu");
         //关闭沙盒模式
-        options.addArguments("–-no-sandbox");
+        options.addArguments("--no-sandbox");
         //disable specifying the browser options
         options.addArguments("--disable-search-engine-choice-screen");
         //disable language download
